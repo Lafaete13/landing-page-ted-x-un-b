@@ -77,7 +77,7 @@ export default function Page() {
 
     try {
       setLoading(true)
-      const res = await fetch('http://localhost:8000/api/ingressos', {
+      const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -202,36 +202,71 @@ export default function Page() {
             <h2>Nos vemos no TEDx!</h2>
             <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento.</p>
             
-            <div className="event-ticket" ref={ticketRef}>
-              <div className="ticket-top">
-                <div><strong>TEDx</strong><span>Universidade de Brasília</span></div>
-                <div className="ticket-venue">CET/UnB</div>
-              </div>
-              <div className="ticket-rule" />
-              <div className="ticket-date">
-                <div><span>DATA</span><strong>19</strong><small>JUN 2024</small></div>
-                <div><span>HORÁRIO</span><strong>15h</strong><small>Credenciamento às 14h</small></div>
-              </div>
-              <div className="ticket-attendee">
-                <span>INGRESSO DE</span><strong>{attendeeName}</strong>
+            {/* Modelo do Ingresso baseado na Arte Oficial da Fernanda */}
+            <div
+              ref={ticketRef}
+              style={{
+                position: 'relative',
+                width: '100%',
+                maxWidth: '430px',
+                height: '520px',
+                backgroundImage: 'url(/ingresso-template.jpeg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
+                margin: '0 auto',
+                fontFamily: 'sans-serif',
+              }}
+            >
+              {/* Nome do Participante abaixo de "INGRESSO DE:" */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '235px',
+                  left: '32px',
+                  right: '32px',
+                  fontSize: '1.15rem',
+                  fontWeight: 'bold',
+                  color: '#111',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                }}
+              >
+                {attendeeName}
               </div>
 
-              {/* QR Code Dinâmico vindo da API */}
-              {qrCodeUrl ? (
-                <div className="qr-frame" aria-label="QR Code do ingresso">
-                  <img src={qrCodeUrl} alt="QR Code do Ingresso" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                </div>
-              ) : (
-                <QrCode />
-              )}
-
-              <div className="ticket-bottom">
-                <span>TEDX UNB 2024</span><span>IDEAS WORTH SPREADING</span>
+              {/* QR Code Dinâmico centralizado na área do ticket */}
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '280px',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  backgroundColor: '#fff',
+                  padding: '10px',
+                  borderRadius: '8px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {qrCodeUrl ? (
+                  <img
+                    src={qrCodeUrl}
+                    alt="QR Code do Ingresso"
+                    style={{ width: '145px', height: '145px', display: 'block' }}
+                  />
+                ) : (
+                  <QrCode />
+                )}
               </div>
             </div>
 
             {/* Botões para download em PNG ou PDF */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '16px', width: '100%' }}>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
               <button className="download-button" onClick={downloadTicketPNG} style={{ flex: 1 }}>
                 <Download size={17} /> Baixar PNG
               </button>
@@ -255,7 +290,7 @@ export default function Page() {
           <div className="tedx-footer">TED<span>x</span></div>
         </div>
         <p>Precisa de ajuda? Fale com a gente<br /><a href="mailto:suporte@tedxunb.com.br">suporte@tedxunb.com.br</a></p>
-        <span className="footer-year">© 2024 TEDx UnB</span>
+        <span className="footer-year">© 2026 TEDx UnB</span>
       </footer>
     </main>
   )
