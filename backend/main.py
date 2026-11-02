@@ -46,7 +46,7 @@ def gerar_qr_code_base64(conteudo: str) -> str:
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return f"data:image/png;base64,{img_str}"
 
-@app.get("/")
+@app.api_route("/", methods=["GET", "HEAD"])
 def home():
     return {"status": "API TEDx UnB Online!"}
 

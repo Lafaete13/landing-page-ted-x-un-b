@@ -209,61 +209,57 @@ export default function Page() {
                 position: 'relative',
                 width: '100%',
                 maxWidth: '430px',
-                height: '520px',
-                backgroundImage: 'url(/ingresso-template.jpeg)',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                borderRadius: '12px',
-                overflow: 'hidden',
-                boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
                 margin: '0 auto',
                 fontFamily: 'sans-serif',
               }}
             >
-              {/* Nome do Participante abaixo de "INGRESSO DE:" */}
+              {/* Imagem original completa sem cortes */}
+              <img
+                src="/ingresso-template.png"
+                alt="Template Ingresso"
+                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }}
+              />
+
+              {/* Nome do Participante (Posicionado percentualmente) */}
               <div
                 style={{
                   position: 'absolute',
-                  top: '235px',
-                  left: '32px',
-                  right: '32px',
-                  fontSize: '1.15rem',
+                  top: '43.5%',
+                  left: '7%',
+                  right: '7%',
+                  fontSize: '1.1rem',
                   fontWeight: 'bold',
                   color: '#111',
                   textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
                 }}
               >
                 {attendeeName}
               </div>
 
-              {/* QR Code Dinâmico centralizado na área do ticket */}
+              {/* QR Code Dinâmico */}
               <div
                 style={{
                   position: 'absolute',
-                  top: '280px',
+                  top: '52%',
                   left: '50%',
                   transform: 'translateX(-50%)',
                   backgroundColor: '#fff',
-                  padding: '10px',
+                  padding: '8px',
                   borderRadius: '8px',
                   boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                 }}
               >
                 {qrCodeUrl ? (
-                  <img
-                    src={qrCodeUrl}
-                    alt="QR Code do Ingresso"
-                    style={{ width: '145px', height: '145px', display: 'block' }}
-                  />
-                ) : (
-                  <QrCode />
-                )}
-              </div>
+                <img
+                  src={qrCodeUrl}
+                  alt="QR Code do Ingresso"
+                  style={{ width: '135px', height: '135px', display: 'block' }}
+                />
+              ) : (
+                <QrCode />
+              )}
             </div>
+          </div>
 
             {/* Botões para download em PNG ou PDF */}
             <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
