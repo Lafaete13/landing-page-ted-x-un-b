@@ -46,7 +46,7 @@ function InfoItem({ icon: Icon, label, children }: { icon: typeof CalendarDays; 
 }
 
 export default function Page() {
-  const [isStudent, setIsStudent] = useState(false)
+  const [tipoParticipante, setTipoParticipante] = useState<'aluno' | 'externo'>('aluno')
   const [submitted, setSubmitted] = useState(false)
   const [attendeeName, setAttendeeName] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -69,10 +69,12 @@ export default function Page() {
     const payload = {
       nome_completo: String(form.get('name')),
       email: email,
+      cpf: String(form.get('cpf')),
       data_nascimento: String(form.get('birthdate')),
-      eh_aluno_unb: isStudent,
-      curso: isStudent ? String(form.get('course')) : null,
-      matricula: isStudent ? String(form.get('registration')) : null,
+      tipo_participante: tipoParticipante,
+      eh_aluno_unb: tipoParticipante === 'aluno',
+      curso: tipoParticipante === 'aluno' ? String(form.get('course')) : null,
+      matricula: tipoParticipante === 'aluno' ? String(form.get('registration')) : null,
     }
 
     try {
@@ -170,26 +172,63 @@ export default function Page() {
               <div><p className="card-kicker">A entrada é gratuita</p><h2>Garanta seu ingresso</h2></div>
             </div>
             <p className="card-intro">Preencha seus dados para viver essa conversa sobre futuros.</p>
+
+            {/* Seleção Obrigatória do Tipo de Participante */}
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+              <button
+                type="button"
+                onClick={() => setTipoParticipante('aluno')}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: tipoParticipante === 'aluno' ? '2px solid #eb0028' : '1px solid #333',
+                  backgroundColor: tipoParticipante === 'aluno' ? 'rgba(235, 0, 40, 0.15)' : '#181818',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Aluno UnB
+              </button>
+              <button
+                type="button"
+                onClick={() => setTipoParticipante('externo')}
+                style={{
+                  flex: 1,
+                  padding: '12px',
+                  borderRadius: '8px',
+                  border: tipoParticipante === 'externo' ? '2px solid #eb0028' : '1px solid #333',
+                  backgroundColor: tipoParticipante === 'externo' ? 'rgba(235, 0, 40, 0.15)' : '#181818',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                Comunidade Externa
+              </button>
+            </div>
+
             <div className="form-grid">
               <label>Nome completo<input name="name" type="text" placeholder="Como podemos te chamar?" required /></label>
+              <label>CPF (para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" required /></label>
               <label>E-mail<input name="email" type="email" placeholder="voce@email.com" required /></label>
               <label>Confirmar e-mail<input name="confirmation" type="email" placeholder="Digite seu e-mail novamente" required onChange={() => setEmailError('')} /></label>
               <label>Data de nascimento<input name="birthdate" type="date" required /></label>
+
+              {tipoParticipante === 'aluno' && (
+                <>
+                  <label>Curso<input name="course" type="text" placeholder="Ex.: Comunicação Social" required /></label>
+                  <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
+                </>
+              )}
             </div>
+
             {emailError && <p className="form-error" role="alert">{emailError}</p>}
-            <label className="student-toggle">
-              <input type="checkbox" checked={isStudent} onChange={(event) => setIsStudent(event.target.checked)} />
-              <span className="fake-check">{isStudent && <Check size={13} />}</span>
-              <span>Sou aluno da UnB</span>
-              <small>Opcional</small>
-            </label>
-            {isStudent && (
-              <div className="student-fields">
-                <label>Curso<input name="course" type="text" placeholder="Ex.: Comunicação Social" required /></label>
-                <label>Matrícula<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
-              </div>
-            )}
-            <button className="submit-button" type="submit" disabled={loading}>
+
+            <button className="submit-button" type="submit" disabled={loading} style={{ marginTop: '20px' }}>
               {loading ? 'Gerando ingresso...' : <>Garantir meu ingresso <ArrowRight size={18} /></>}
             </button>
             <p className="privacy-note"><span>⌁</span> Seus dados serão usados apenas para o credenciamento do evento.</p>
@@ -250,16 +289,16 @@ export default function Page() {
                 }}
               >
                 {qrCodeUrl ? (
-                <img
-                  src={qrCodeUrl}
-                  alt="QR Code do Ingresso"
-                  style={{ width: '135px', height: '135px', display: 'block' }}
-                />
-              ) : (
-                <QrCode />
-              )}
+                  <img
+                    src={qrCodeUrl}
+                    alt="QR Code do Ingresso"
+                    style={{ width: '135px', height: '135px', display: 'block' }}
+                  />
+                ) : (
+                  <QrCode />
+                )}
+              </div>
             </div>
-          </div>
 
             {/* Botões para download em PNG ou PDF */}
             <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
