@@ -78,8 +78,8 @@ export default function PortariaPage() {
   async function validarIngresso(ingressoId: string) {
     setLoading(true)
     try {
-      const res = await fetch(`http://localhost:8000/api/validar/${ingressoId.trim()}`, {
-        method: 'POST',
+      const res = await fetch(`https://landing-page-ted-x-un-b.onrender.com/api/validar/${ingressoId.trim()}`, {
+  method: 'POST',
       })
       const data = await res.json()
       if (!res.ok) {
