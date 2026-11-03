@@ -1,22 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
 @import 'tailwindcss';
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 
 @custom-variant dark (&:is(.dark *));
 
-:root { --background: #111111; --foreground: #f4f1ed; --red: #eb0028; --muted: #a4a09c; --line: #393633; --panel: #1b1a19; }
-@theme inline { --color-background: var(--background); --color-foreground: var(--foreground); --color-border: var(--line); }
+:root { 
+  --background: #111111; 
+  --foreground: #f4f1ed; 
+  --red: #eb0028; 
+  --muted: #a4a09c; 
+  --line: #393633; 
+  --panel: #1b1a19; 
+}
+
+@theme inline { 
+  --color-background: var(--background); 
+  --color-foreground: var(--foreground); 
+  --color-border: var(--line); 
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
+body { 
+  margin: 0; 
+  background: var(--background); 
+  color: var(--foreground); 
+  font-family: 'Inter', sans-serif; 
+  overflow-x: hidden;
+}
+
 button, input { font: inherit; }
-.site-shell { position: relative; min-height: 100vh; overflow: hidden; background: radial-gradient(circle at 74% 9%, rgba(235,0,40,.12), transparent 26rem), #111; }
-.background-glow { position: absolute; width: 520px; height: 520px; top: 370px; left: -340px; border-radius: 50%; background: rgba(235,0,40,.08); filter: blur(100px); pointer-events: none; }
-.topbar, .hero-section, .registration-section, .site-footer { width: min(1120px, calc(100% - 40px)); margin-inline: auto; position: relative; z-index: 1; }
-.topbar { height: 86px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,.11); }
-.tedx-mark { font-size: 27px; font-weight: 900; letter-spacing: -2px; }.tedx-mark span, .tedx-footer span { color: var(--red); font-style: italic; }.topbar-label { color: #ccc; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }.topbar-label i { display: inline-block; width: 6px; height: 6px; margin-left: 10px; background: var(--red); border-radius: 50%; }
-.hero-section { display: grid; grid-template-columns: 1.3fr .7fr; gap: 50px; padding: 104px 0 90px; }.eyebrow { color: var(--red); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }.eyebrow span { display: inline-block; width: 22px; height: 1px; margin: 0 10px 3px 0; background: var(--red); }.hero-copy h1 { margin: 22px 0 25px; max-width: 700px; font-size: clamp(3.5rem, 8vw, 6.8rem); line-height: .91; letter-spacing: -.075em; font-weight: 800; }.hero-copy h1 em { color: var(--red); font-style: normal; }.hero-description { max-width: 540px; color: #bab6b2; font-size: 16px; line-height: 1.65; }.event-details { display: flex; gap: 28px; margin-top: 46px; }.info-item { display: flex; align-items: flex-start; gap: 10px; }.info-icon { color: var(--red); padding-top: 1px; }.info-item span { display: block; margin-bottom: 6px; color: #85817e; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }.info-item strong { display: block; max-width: 190px; color: #f4f1ed; font-size: 12px; line-height: 1.4; }.info-item small { color: #8b8783; font-size: 11px; font-weight: 400; }.hero-stamp { width: 245px; height: 245px; align-self: center; justify-self: end; display: grid; place-items: center; border: 1px solid rgba(235,0,40,.65); border-radius: 50%; color: #d9d5d1; transform: rotate(13deg); text-align: center; font-size: 16px; line-height: 1.05; letter-spacing: .2em; }.hero-stamp b { color: var(--red); font-weight: 900; }.hero-stamp i { position: absolute; color: var(--red); font-size: 26px; font-style: normal; }.hero-stamp:before, .hero-stamp:after { content: ''; position: absolute; border: 1px dashed rgba(235,0,40,.45); border-radius: 50%; inset: 12px; }.hero-stamp:after { inset: 25px; border-style: solid; opacity: .35; }
-.registration-section { display: flex; justify-content: center; padding: 0 0 110px; }.registration-card, .success-card { width: min(100%, 610px); border: 1px solid #34312e; background: linear-gradient(135deg, rgba(37,35,33,.96), rgba(25,24,23,.96)); box-shadow: 0 26px 70px rgba(0,0,0,.28); }.registration-card { padding: 37px 42px 30px; }.card-heading { display: flex; align-items: center; gap: 15px; }.ticket-icon { display: grid; place-items: center; width: 43px; height: 43px; color: var(--red); border: 1px solid rgba(235,0,40,.5); }.card-kicker { margin: 0 0 7px; color: var(--red); font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }.registration-card h2, .success-card h2 { margin: 0; color: #faf8f5; font-size: 28px; letter-spacing: -.04em; }.card-intro { margin: 23px 0 28px; color: #95918d; font-size: 13px; }.form-grid, .student-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 19px 15px; }label { color: #c3bfbb; font-size: 11px; font-weight: 700; letter-spacing: .04em; }input[type=text], input[type=email], input[type=date] { display: block; width: 100%; margin-top: 8px; padding: 13px 14px; border: 1px solid #484440; border-radius: 0; outline: 0; background: #141313; color: #faf8f5; font-size: 12px; font-weight: 400; transition: border .2s, box-shadow .2s; }input::placeholder { color: #66615d; }input:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(235,0,40,.12); }.form-error { margin: 14px 0 0; color: #ff7187; font-size: 11px; }.student-toggle { display: flex; align-items: center; gap: 10px; margin: 27px 0 20px; cursor: pointer; }.student-toggle input { position: absolute; opacity: 0; }.fake-check { display: grid; place-items: center; width: 18px; height: 18px; color: #fff; border: 1px solid #625e59; background: #141313; }.student-toggle input:focus-visible + .fake-check { outline: 2px solid var(--red); outline-offset: 2px; }.student-toggle small { margin-left: auto; color: #716d69; font-weight: 400; }.student-fields { margin: -2px 0 22px; }.submit-button, .download-button { border: 0; cursor: pointer; }.submit-button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; color: #fff; background: var(--red); font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; transition: background .2s, transform .2s; }.submit-button:hover { background: #ff173d; transform: translateY(-2px); }.privacy-note { margin: 19px 0 0; color: #68645f; font-size: 10px; text-align: center; }.privacy-note span { color: var(--red); margin-right: 5px; }
-.success-card { position: relative; padding: 42px; text-align: center; }.close-button { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid #45413d; color: #aaa5a0; background: transparent; cursor: pointer; }.success-check { display: grid; place-items: center; width: 44px; height: 44px; margin: 0 auto 20px; color: #fff; border-radius: 50%; background: var(--red); }.success-card .card-kicker { margin-bottom: 10px; }.success-copy { max-width: 390px; margin: 14px auto 23px; color: #9f9a95; font-size: 13px; line-height: 1.5; }.event-ticket { position: relative; width: min(100%, 430px); margin: 25px auto 24px; padding: 24px 25px 18px; overflow: hidden; border: 1px solid rgba(235,0,40,.5); background: linear-gradient(145deg, #221b1c, #120f10); text-align: left; box-shadow: 0 15px 32px rgba(0,0,0,.3); }.event-ticket::before, .event-ticket::after { content: ''; position: absolute; top: 127px; width: 22px; height: 22px; border-radius: 50%; background: #1b1a19; }.event-ticket::before { left: -12px; }.event-ticket::after { right: -12px; }.ticket-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }.ticket-top strong { display: block; color: var(--red); font-size: 24px; font-weight: 900; letter-spacing: -.08em; }.ticket-top span, .ticket-venue { display: block; margin-top: 4px; color: #f4f1ed; font-size: 11px; font-weight: 700; letter-spacing: .04em; }.ticket-venue { color: #b9b1ad; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }.ticket-rule { height: 1px; margin: 20px 0 17px; border-top: 1px dashed #72515a; }.ticket-date { display: flex; gap: 52px; }.ticket-date span, .ticket-attendee span { display: block; color: #9b8588; font-size: 8px; font-weight: 700; letter-spacing: .16em; }.ticket-date strong { display: block; margin-top: 2px; color: #fff; font-size: 31px; line-height: 1; letter-spacing: -.06em; }.ticket-date small { display: block; margin-top: 4px; color: #c5bdbc; font-size: 9px; }.ticket-attendee { margin-top: 19px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.1); }.ticket-attendee strong { display: block; max-width: 100%; margin-top: 5px; overflow: hidden; color: #fff; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }.event-ticket .qr-frame { margin: 21px auto 17px; }.ticket-bottom { display: flex; justify-content: space-between; gap: 12px; padding-top: 13px; border-top: 1px dashed #72515a; color: #9b8588; font-size: 8px; font-weight: 700; letter-spacing: .12em; }.qr-frame { display: grid; place-items: center; width: 166px; height: 166px; margin: 0 auto 22px; padding: 10px; background: #fff; }.qr-code { display: grid; grid-template-columns: repeat(19, 1fr); width: 142px; height: 142px; }.qr-code span { display: block; }.qr-dark { background: #111; }.qr-light { background: #fff; }.download-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border: 1px solid #514d48; color: #eee; background: transparent; font-size: 11px; font-weight: 700; }.download-button:hover { border-color: var(--red); }.notice { margin-top: 27px; padding: 17px 19px; border-left: 2px solid var(--red); background: rgba(235,0,40,.06); text-align: left; }.notice strong { color: var(--red); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }.notice p { margin: 8px 0 0; color: #a6a09c; font-size: 11px; line-height: 1.5; }
-.site-footer { display: flex; align-items: center; justify-content: space-between; gap: 30px; min-height: 112px; border-top: 1px solid rgba(255,255,255,.11); color: #78736e; font-size: 11px; }.footer-brand { display: flex; align-items: center; gap: 18px; }.unb-logo { color: #eee; font-size: 23px; font-weight: 900; letter-spacing: -.1em; }.unb-logo span { color: #62a0d1; font-size: 12px; margin-left: 5px; }.footer-divider { height: 27px; width: 1px; background: #514c47; }.tedx-footer { color: #eee; font-size: 21px; font-weight: 900; letter-spacing: -.1em; }.site-footer p { margin: 0; text-align: center; line-height: 1.5; }.site-footer a { color: #c8c2bd; text-decoration: none; }.footer-year { color: #5e5a56; }
-@media (max-width: 760px) { .topbar, .hero-section, .registration-section, .site-footer { width: min(100% - 30px, 610px); }.topbar { height: 70px; }.topbar-label { font-size: 9px; }.hero-section { display: block; padding: 72px 0 65px; }.hero-copy h1 { font-size: clamp(3.3rem, 16vw, 5rem); }.hero-description { font-size: 14px; }.event-details { display: grid; gap: 18px; margin-top: 34px; }.info-item strong { max-width: none; }.hero-stamp { display: none; }.registration-card, .success-card { padding: 30px 21px 25px; }.form-grid, .student-fields { grid-template-columns: 1fr; gap: 17px; }.event-ticket { padding: 20px 17px 15px; }.ticket-date { gap: 28px; }.ticket-date strong { font-size: 27px; }.ticket-bottom { font-size: 7px; }.site-footer { flex-wrap: wrap; justify-content: center; gap: 20px; padding: 28px 0; }.site-footer p { order: 3; width: 100%; }.footer-year { display: none; } }
+
+.site-shell { 
+  position: relative; 
+  min-height: 100vh; 
+  overflow: hidden; 
+  background: radial-gradient(circle at 74% 9%, rgba(235,0,40,.12), transparent 26rem), #111; 
+}
+
+.background-glow { 
+  position: absolute; 
+  width: 520px; 
+  height: 520px; 
+  top: 370px; 
+  left: -340px; 
+  border-radius: 50%; 
+  background: rgba(235,0,40,.08); 
+  filter: blur(100px); 
+  pointer-events: none; 
+}
+
+.topbar, .hero-section, .registration-section, .site-footer { 
+  width: min(1120px, calc(100% - 40px)); 
+  margin-inline: auto; 
+  position: relative; 
+  z-index: 1; 
+}
+
+.topbar { 
+  height: 86px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  border-bottom: 1px solid rgba(255,255,255,.11); 
+}
+
+.tedx-mark { font-size: 27px; font-weight: 900; letter-spacing: -2px; }
+.tedx-mark span, .tedx-footer span { color: var(--red); font-style: italic; }
+.topbar-label { color: #ccc; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+.topbar-label i { display: inline-block; width: 6px; height: 6px; margin-left: 10px; background: var(--red); border-radius: 50%; }
+
+.hero-section { display: grid; grid-template-columns: 1.3fr .7fr; gap: 50px; padding: 104px 0 90px; }
+.eyebrow { color: var(--red); font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.eyebrow span { display: inline-block; width: 22px; height: 1px; margin: 0 10px 3px 0; background: var(--red); }
+.hero-copy h1 { margin: 22px 0 25px; max-width: 700px; font-size: clamp(3.5rem, 8vw, 6.8rem); line-height: .91; letter-spacing: -.075em; font-weight: 800; }
+.hero-copy h1 em { color: var(--red); font-style: normal; }
+.hero-description { max-width: 540px; color: #bab6b2; font-size: 16px; line-height: 1.65; }
+.event-details { display: flex; gap: 28px; margin-top: 46px; }
+.info-item { display: flex; align-items: flex-start; gap: 10px; }
+.info-icon { color: var(--red); padding-top: 1px; }
+.info-item span { display: block; margin-bottom: 6px; color: #85817e; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.info-item strong { display: block; max-width: 190px; color: #f4f1ed; font-size: 12px; line-height: 1.4; }
+.info-item small { color: #8b8783; font-size: 11px; font-weight: 400; }
+.hero-stamp { width: 245px; height: 245px; align-self: center; justify-self: end; display: grid; place-items: center; border: 1px solid rgba(235,0,40,.65); border-radius: 50%; color: #d9d5d1; transform: rotate(13deg); text-align: center; font-size: 16px; line-height: 1.05; letter-spacing: .2em; }
+.hero-stamp b { color: var(--red); font-weight: 900; }
+.hero-stamp i { position: absolute; color: var(--red); font-size: 26px; font-style: normal; }
+.hero-stamp:before, .hero-stamp:after { content: ''; position: absolute; border: 1px dashed rgba(235,0,40,.45); border-radius: 50%; inset: 12px; }
+.hero-stamp:after { inset: 25px; border-style: solid; opacity: .35; }
+
+.registration-section { display: flex; justify-content: center; padding: 0 0 110px; }
+.registration-card, .success-card { width: min(100%, 610px); border: 1px solid #34312e; background: linear-gradient(135deg, rgba(37,35,33,.96), rgba(25,24,23,.96)); box-shadow: 0 26px 70px rgba(0,0,0,.28); }
+.registration-card { padding: 37px 42px 30px; }
+.card-heading { display: flex; align-items: center; gap: 15px; }
+.ticket-icon { display: grid; place-items: center; width: 43px; height: 43px; color: var(--red); border: 1px solid rgba(235,0,40,.5); }
+.card-kicker { margin: 0 0 7px; color: var(--red); font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+.registration-card h2, .success-card h2 { margin: 0; color: #faf8f5; font-size: 28px; letter-spacing: -.04em; }
+.card-intro { margin: 23px 0 28px; color: #95918d; font-size: 13px; }
+.form-grid, .student-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 19px 15px; }
+label { color: #c3bfbb; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+input[type=text], input[type=email], input[type=date] { display: block; width: 100%; margin-top: 8px; padding: 13px 14px; border: 1px solid #484440; border-radius: 0; outline: 0; background: #141313; color: #faf8f5; font-size: 12px; font-weight: 400; transition: border .2s, box-shadow .2s; }
+input::placeholder { color: #66615d; }
+input:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(235,0,40,.12); }
+.form-error { margin: 14px 0 0; color: #ff7187; font-size: 11px; }
+.student-toggle { display: flex; align-items: center; gap: 10px; margin: 27px 0 20px; cursor: pointer; }
+.student-toggle input { position: absolute; opacity: 0; }
+.fake-check { display: grid; place-items: center; width: 18px; height: 18px; color: #fff; border: 1px solid #625e59; background: #141313; }
+.student-toggle input:focus-visible + .fake-check { outline: 2px solid var(--red); outline-offset: 2px; }
+.student-toggle small { margin-left: auto; color: #716d69; font-weight: 400; }
+.student-fields { margin: -2px 0 22px; }
+.submit-button, .download-button { border: 0; cursor: pointer; }
+.submit-button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; color: #fff; background: var(--red); font-size: 12px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; transition: background .2s, transform .2s; }
+.submit-button:hover { background: #ff173d; transform: translateY(-2px); }
+.privacy-note { margin: 19px 0 0; color: #68645f; font-size: 10px; text-align: center; }
+.privacy-note span { color: var(--red); margin-right: 5px; }
+
+.success-card { position: relative; padding: 42px; text-align: center; }
+.close-button { position: absolute; top: 16px; right: 16px; display: grid; place-items: center; width: 30px; height: 30px; border: 1px solid #45413d; color: #aaa5a0; background: transparent; cursor: pointer; }
+.success-check { display: grid; place-items: center; width: 44px; height: 44px; margin: 0 auto 20px; color: #fff; border-radius: 50%; background: var(--red); }
+.success-card .card-kicker { margin-bottom: 10px; }
+.success-copy { max-width: 390px; margin: 14px auto 23px; color: #9f9a95; font-size: 13px; line-height: 1.5; }
+.event-ticket { position: relative; width: min(100%, 430px); margin: 25px auto 24px; padding: 24px 25px 18px; overflow: hidden; border: 1px solid rgba(235,0,40,.5); background: linear-gradient(145deg, #221b1c, #120f10); text-align: left; box-shadow: 0 15px 32px rgba(0,0,0,.3); }
+.event-ticket::before, .event-ticket::after { content: ''; position: absolute; top: 127px; width: 22px; height: 22px; border-radius: 50%; background: #1b1a19; }
+.event-ticket::before { left: -12px; }
+.event-ticket::after { right: -12px; }
+.ticket-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.ticket-top strong { display: block; color: var(--red); font-size: 24px; font-weight: 900; letter-spacing: -.08em; }
+.ticket-top span, .ticket-venue { display: block; margin-top: 4px; color: #f4f1ed; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+.ticket-venue { color: #b9b1ad; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+.ticket-rule { height: 1px; margin: 20px 0 17px; border-top: 1px dashed #72515a; }
+.ticket-date { display: flex; gap: 52px; }
+.ticket-date span, .ticket-attendee span { display: block; color: #9b8588; font-size: 8px; font-weight: 700; letter-spacing: .16em; }
+.ticket-date strong { display: block; margin-top: 2px; color: #fff; font-size: 31px; line-height: 1; letter-spacing: -.06em; }
+.ticket-date small { display: block; margin-top: 4px; color: #c5bdbc; font-size: 9px; }
+.ticket-attendee { margin-top: 19px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.1); }
+.ticket-attendee strong { display: block; max-width: 100%; margin-top: 5px; overflow: hidden; color: #fff; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
+.event-ticket .qr-frame { margin: 21px auto 17px; }
+.ticket-bottom { display: flex; justify-content: space-between; gap: 12px; padding-top: 13px; border-top: 1px dashed #72515a; color: #9b8588; font-size: 8px; font-weight: 700; letter-spacing: .12em; }
+.qr-frame { display: grid; place-items: center; width: 166px; height: 166px; margin: 0 auto 22px; padding: 10px; background: #fff; }
+.qr-code { display: grid; grid-template-columns: repeat(19, 1fr); width: 142px; height: 142px; }
+.qr-code span { display: block; }
+.qr-dark { background: #111; }
+.qr-light { background: #fff; }
+.download-button { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border: 1px solid #514d48; color: #eee; background: transparent; font-size: 11px; font-weight: 700; }
+.download-button:hover { border-color: var(--red); }
+.notice { margin-top: 27px; padding: 17px 19px; border-left: 2px solid var(--red); background: rgba(235,0,40,.06); text-align: left; }
+.notice strong { color: var(--red); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.notice p { margin: 8px 0 0; color: #a6a09c; font-size: 11px; line-height: 1.5; }
+
+.site-footer { display: flex; align-items: center; justify-content: space-between; gap: 30px; min-height: 112px; border-top: 1px solid rgba(255,255,255,.11); color: #78736e; font-size: 11px; }
+.footer-brand { display: flex; align-items: center; gap: 18px; }
+.unb-logo { color: #eee; font-size: 23px; font-weight: 900; letter-spacing: -.1em; }
+.unb-logo span { color: #62a0d1; font-size: 12px; margin-left: 5px; }
+.footer-divider { height: 27px; width: 1px; background: #514c47; }
+.tedx-footer { color: #eee; font-size: 21px; font-weight: 900; letter-spacing: -.1em; }
+.site-footer p { margin: 0; text-align: center; line-height: 1.5; }
+.site-footer a { color: #c8c2bd; text-decoration: none; }
+.footer-year { color: #5e5a56; }
+
+/* Estilos Específicos da Landing Page do evento */
+.bg-ted-gradient {
+  background: linear-gradient(90deg, #7885c3 0%, #68b284 30%, #e2a842 65%, #d13f96 100%);
+}
+
+.bg-footer-gradient {
+  background: linear-gradient(90deg, #dce462 0%, #7db979 25%, #cb84bb 60%, #e5764c 100%);
+}
+
+.pos-prof { top: 20%; left: 18.5%; width: 16%; } 
+.pos-meninos { top: 8%; left: 64.5%; width: 25%; } 
+.pos-rubs { top: 70%; left: 21%; width: 16%; } 
+.pos-ingrid { top: 54%; left: 80.5%; width: 16%; } 
+
+.path-wrapper {
+  position: relative;
+  display: inline-block; 
+  width: 100%;
+  max-width: 85%; 
+}
+
+@media (max-width: 760px) { 
+  .topbar, .hero-section, .registration-section, .site-footer { width: min(100% - 30px, 610px); }
+  .topbar { height: 70px; }
+  .topbar-label { font-size: 9px; }
+  .hero-section { display: block; padding: 72px 0 65px; }
+  .hero-copy h1 { font-size: clamp(3.3rem, 16vw, 5rem); }
+  .hero-description { font-size: 14px; }
+  .event-details { display: grid; gap: 18px; margin-top: 34px; }
+  .info-item strong { max-width: none; }
+  .hero-stamp { display: none; }
+  .registration-card, .success-card { padding: 30px 21px 25px; }
+  .form-grid, .student-fields { grid-template-columns: 1fr; gap: 17px; }
+  .event-ticket { padding: 20px 17px 15px; }
+  .ticket-date { gap: 28px; }
+  .ticket-date strong { font-size: 27px; }
+  .ticket-bottom { font-size: 7px; }
+  .site-footer { flex-wrap: wrap; justify-content: center; gap: 20px; padding: 28px 0; }
+  .site-footer p { order: 3; width: 100%; }
+  .footer-year { display: none; } 
+}

@@ -1,332 +1,253 @@
 'use client'
 
-import { useRef, useState } from 'react'
-import html2canvas from 'html2canvas'
-import { jsPDF } from 'jspdf'
-import {
-  ArrowRight,
-  CalendarDays,
-  Check,
-  Clock3,
-  Download,
-  MapPin,
-  Ticket,
-  X,
-} from 'lucide-react'
+import { useState } from 'react'
+import Link from 'next/link'
 
-const qrPattern = [
-  '1111111001011111111', '1000001011011000001', '1011101001011011101',
-  '1011101010011011101', '1011101001111011101', '1000001010101000001',
-  '1111111010101111111', '0000000011010000000', '1010111010010110101',
-  '0110100111101001010', '1101011100110111011', '0011010011011100100',
-  '1011101110100101110', '0000000010111010010', '1111111011001110101',
-  '1000001000110011100', '1011101011010110111', '1011101000101001001',
-  '1011101011110110100', '1000001010011101011', '1111111011100110010',
-]
-
-function QrCode() {
-  return (
-    <div className="qr-frame" aria-label="QR Code do ingresso">
-      <div className="qr-code">
-        {qrPattern.map((row, rowIndex) => row.split('').map((cell, cellIndex) => (
-          <span key={`${rowIndex}-${cellIndex}`} className={cell === '1' ? 'qr-dark' : 'qr-light'} />
-        )))}
-      </div>
-    </div>
-  )
+interface Speaker {
+  nome: string
+  descricao: string
+  imagemSrc: string
 }
 
-function InfoItem({ icon: Icon, label, children }: { icon: typeof CalendarDays; label: string; children: React.ReactNode }) {
-  return (
-    <div className="info-item">
-      <div className="info-icon"><Icon size={18} strokeWidth={1.8} /></div>
-      <div><span>{label}</span><strong>{children}</strong></div>
-    </div>
-  )
-}
+export default function Home() {
+  const [activeSpeaker, setActiveSpeaker] = useState<Speaker | null>(null)
 
-export default function Page() {
-  const [tipoParticipante, setTipoParticipante] = useState<'aluno' | 'externo'>('aluno')
-  const [submitted, setSubmitted] = useState(false)
-  const [attendeeName, setAttendeeName] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [qrCodeUrl, setQrCodeUrl] = useState('')
-  const [loading, setLoading] = useState(false)
-  const ticketRef = useRef<HTMLDivElement>(null)
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const form = new FormData(event.currentTarget)
-    const email = String(form.get('email') || '')
-    const confirmation = String(form.get('confirmation') || '')
-
-    if (email !== confirmation) {
-      setEmailError('Os e-mails precisam ser iguais.')
-      return
-    }
-    setEmailError('')
-
-    const payload = {
-      nome_completo: String(form.get('name')),
-      email: email,
-      cpf: String(form.get('cpf')),
-      data_nascimento: String(form.get('birthdate')),
-      tipo_participante: tipoParticipante,
-      eh_aluno_unb: tipoParticipante === 'aluno',
-      curso: tipoParticipante === 'aluno' ? String(form.get('course')) : null,
-      matricula: tipoParticipante === 'aluno' ? String(form.get('registration')) : null,
-    }
-
-    try {
-      setLoading(true)
-      const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        alert(data.detail || 'Erro ao realizar inscrição.')
-        return
-      }
-
-      setQrCodeUrl(data.qr_code_base64)
-      setAttendeeName(payload.nome_completo)
-      setSubmitted(true)
-    } catch (error) {
-      alert('Não foi possível conectar ao servidor. Verifique se a API está rodando.')
-    } finally {
-      setLoading(false)
-    }
+  function openBio(nome: string, descricao: string, imagemSrc: string) {
+    setActiveSpeaker({ nome, descricao, imagemSrc })
   }
 
-  // Função para baixar como Imagem PNG
-  async function downloadTicketPNG() {
-    if (!ticketRef.current) return
-
-    const canvas = await html2canvas(ticketRef.current, {
-      backgroundColor: null,
-      scale: 3,
-      useCORS: true,
-      logging: false,
-      allowTaint: true,
-    })
-
-    const link = document.createElement('a')
-    link.download = `ingresso-tedx-unb-${attendeeName.toLowerCase().replace(/\s+/g, '-')}.png`
-    link.href = canvas.toDataURL('image/png')
-    link.click()
-  }
-
-  // Função para baixar como arquivo PDF
-  async function downloadTicketPDF() {
-    if (!ticketRef.current) return
-
-    const canvas = await html2canvas(ticketRef.current, {
-      scale: 3,
-      useCORS: true,
-      logging: false,
-      allowTaint: true,
-    })
-
-    const imgData = canvas.toDataURL('image/png')
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'px',
-      format: [canvas.width / 3, canvas.height / 3],
-    })
-
-    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 3, canvas.height / 3)
-    pdf.save(`ingresso-tedx-unb-${attendeeName.toLowerCase().replace(/\s+/g, '-')}.pdf`)
+  function closeBio() {
+    setActiveSpeaker(null)
   }
 
   return (
-    <main className="site-shell">
-      <div className="background-glow" aria-hidden="true" />
-      <header className="topbar">
-        <div className="tedx-mark"><b>TED</b><span>x</span></div>
-        <div className="topbar-label">Universidade de Brasília <i /></div>
-      </header>
+    <div className="antialiased flex flex-col min-h-screen">
+      {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
+      <nav className="w-full bg-ted-gradient py-6 px-4 md:px-8 flex flex-col md:flex-row justify-between items-center z-50">
+        <div className="mb-4 md:mb-0">
+          <h1 className="text-2xl font-bold text-gray-800 leading-none">
+            <span className="text-red-600 font-black">TEDx</span><br />
+            <span className="font-normal text-gray-700">Universidade<br />de Brasília</span>
+          </h1>
+        </div>
+        
+        <div className="flex gap-6 md:gap-10 text-black font-medium text-sm md:text-base">
+          <a href="#sobre" className="hover:text-white transition-colors">Sobre</a>
+          <a href="#palestrantes" className="hover:text-white transition-colors">Palestrantes</a>
+          <a href="#informacoes" className="hover:text-white transition-colors">Informações</a>
+          <Link href="/ingressos" className="font-bold hover:text-white transition-colors">
+            Ingressos
+          </Link>
+        </div>
+      </nav>
 
-      <section className="hero-section">
-        <div className="hero-copy">
-          <p className="eyebrow"><span /> Um evento para imaginar novos caminhos</p>
-          <h1>TEDx <em>Universidade</em><br />de Brasília</h1>
-          <p className="hero-description">Pensar sobre os futuros e propor um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.</p>
-          <div className="event-details">
-            <InfoItem icon={CalendarDays} label="Data">Dia 19</InfoItem>
-            <InfoItem icon={Clock3} label="Horário">Credenciamento às 14h <small>|</small> Início às 15h</InfoItem>
-            <InfoItem icon={MapPin} label="Local">Centro de Excelência em Turismo <small>(CET/UnB)</small></InfoItem>
+      {/* SECÇÃO HERO (SOBRE) */}
+      <main id="sobre" className="w-full flex flex-col md:flex-row">
+        {/* Esquerda: Fundo Branco + Mãos fluidas */}
+        <div className="w-full md:w-1/2 bg-white flex items-center justify-start p-4 md:p-8 min-h-[50vh] md:min-h-[70vh]">
+          <img 
+            src="/mão-8.png" 
+            alt="Mãos segurando figura geométrica" 
+            className="w-full max-w-full h-auto object-contain object-left" 
+          />
+        </div>
+
+        {/* Direita: Fundo Cinza + Texto */}
+        <div className="w-full md:w-1/2 bg-[#b5b5b5] flex flex-col justify-center p-8 lg:p-16 md:min-h-[70vh]">
+          <h2 className="text-4xl lg:text-5xl xl:text-6xl font-black leading-[1.1] tracking-tight mb-6 text-black">
+            Vários Futuros:<br />
+            <span className="font-medium text-3xl lg:text-4xl xl:text-5xl">Pluriverso de<br />Narrativas Fundadoras</span>
+          </h2>
+          
+          <div className="text-black/80 text-base lg:text-lg mb-12 space-y-4 max-w-xl">
+            <p>Pensar sobre os futuros é um exercício constante do presente.</p>
+            <p>Mas que futuros são esses que sonhamos construir?</p>
+            <p>Das culturas ancestrais que firmam resistência aos espaços de produção dos saberes acadêmicos, propomos um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.</p>
           </div>
         </div>
-        <div className="hero-stamp" aria-hidden="true"><span>IDEAS<br /><b>WORTH</b><br />SPREADING</span><i>×</i></div>
-      </section>
+      </main>
+      
+      {/* SECÇÃO PALESTRANTES */}
+      <section id="palestrantes" className="w-full bg-[#b5b5b5] px-4 md:px-8 pt-16 pb-12 flex-grow">
+        <div className="max-w-screen-2xl mx-auto">
+          <h2 className="text-4xl lg:text-5xl font-black tracking-tighter mb-12 text-black text-left">
+            Palestrantes:
+          </h2>
 
-      <section className="registration-section" id="inscricao">
-        {!submitted ? (
-          <form className="registration-card" onSubmit={handleSubmit}>
-            <div className="card-heading">
-              <div className="ticket-icon"><Ticket size={21} /></div>
-              <div><p className="card-kicker">A entrada é gratuita</p><h2>Garanta seu ingresso</h2></div>
-            </div>
-            <p className="card-intro">Preencha seus dados para viver essa conversa sobre futuros.</p>
-
-            {/* Seleção Obrigatória do Tipo de Participante */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-              <button
-                type="button"
-                onClick={() => setTipoParticipante('aluno')}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: tipoParticipante === 'aluno' ? '2px solid #eb0028' : '1px solid #333',
-                  backgroundColor: tipoParticipante === 'aluno' ? 'rgba(235, 0, 40, 0.15)' : '#181818',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Aluno UnB
-              </button>
-              <button
-                type="button"
-                onClick={() => setTipoParticipante('externo')}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: tipoParticipante === 'externo' ? '2px solid #eb0028' : '1px solid #333',
-                  backgroundColor: tipoParticipante === 'externo' ? 'rgba(235, 0, 40, 0.15)' : '#181818',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Comunidade Externa
-              </button>
-            </div>
-
-            <div className="form-grid">
-              <label>Nome completo<input name="name" type="text" placeholder="Como podemos te chamar?" required /></label>
-              <label>CPF (para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" required /></label>
-              <label>E-mail<input name="email" type="email" placeholder="voce@email.com" required /></label>
-              <label>Confirmar e-mail<input name="confirmation" type="email" placeholder="Digite seu e-mail novamente" required onChange={() => setEmailError('')} /></label>
-              <label>Data de nascimento<input name="birthdate" type="date" required /></label>
-
-              {tipoParticipante === 'aluno' && (
-                <>
-                  <label>Curso<input name="course" type="text" placeholder="Ex.: Comunicação Social" required /></label>
-                  <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
-                </>
-              )}
-            </div>
-
-            {emailError && <p className="form-error" role="alert">{emailError}</p>}
-
-            <button className="submit-button" type="submit" disabled={loading} style={{ marginTop: '20px' }}>
-              {loading ? 'Gerando ingresso...' : <>Garantir meu ingresso <ArrowRight size={18} /></>}
-            </button>
-            <p className="privacy-note"><span>⌁</span> Seus dados serão usados apenas para o credenciamento do evento.</p>
-          </form>
-        ) : (
-          <div className="success-card" role="status">
-            <button className="close-button" onClick={() => setSubmitted(false)} aria-label="Fechar confirmação"><X size={19} /></button>
-            <div className="success-check"><Check size={23} /></div>
-            <p className="card-kicker">Ingresso confirmado</p>
-            <h2>Nos vemos no TEDx!</h2>
-            <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento.</p>
-            
-            {/* Modelo do Ingresso baseado na Arte Oficial da Fernanda */}
-            <div
-              ref={ticketRef}
-              style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '430px',
-                margin: '0 auto',
-                fontFamily: 'sans-serif',
-              }}
-            >
-              {/* Imagem original completa sem cortes */}
-              <img
-                src="/ingresso-template.png"
-                alt="Template Ingresso"
-                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '12px' }}
+          {/* DESKTOP: O Caminho com fotos interativas */}
+          <div className="hidden md:flex justify-center w-full">
+            <div className="path-wrapper">
+              <img src="/caminho-8.png" alt="Caminho colorido" className="w-full h-auto block" />
+              
+              <img 
+                src="/prof-8.png" 
+                onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+                className="absolute pos-prof cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Professora" 
               />
-
-              {/* Nome do Participante (Posicionado percentualmente) */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '43.5%',
-                  left: '7%',
-                  right: '7%',
-                  fontSize: '1.1rem',
-                  fontWeight: 'bold',
-                  color: '#111',
-                  textTransform: 'uppercase',
-                }}
-              >
-                {attendeeName}
-              </div>
-
-              {/* QR Code Dinâmico */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '52%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: '#fff',
-                  padding: '8px',
-                  borderRadius: '8px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                }}
-              >
-                {qrCodeUrl ? (
-                  <img
-                    src={qrCodeUrl}
-                    alt="QR Code do Ingresso"
-                    style={{ width: '135px', height: '135px', display: 'block' }}
-                  />
-                ) : (
-                  <QrCode />
-                )}
-              </div>
-            </div>
-
-            {/* Botões para download em PNG ou PDF */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
-              <button className="download-button" onClick={downloadTicketPNG} style={{ flex: 1 }}>
-                <Download size={17} /> Baixar PNG
-              </button>
-              <button className="download-button" onClick={downloadTicketPDF} style={{ flex: 1, backgroundColor: '#222', borderColor: '#444' }}>
-                <Download size={17} /> Baixar PDF
-              </button>
-            </div>
-
-            <div className="notice">
-              <strong>Importante</strong>
-              <p>O credenciamento será iniciado às 14h no CET/UnB. Chegue com antecedência para validar seu ingresso antes do início das apresentações às 15h.</p>
+              
+              <img 
+                src="/meninos-8.png" 
+                onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+                className="absolute pos-meninos cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Dupla" 
+              />
+              
+              <img 
+                src="/rubs-8.png" 
+                onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+                className="absolute pos-rubs cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Rubens" 
+              />
+              
+              <img 
+                src="/ingrid-8.png" 
+                onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+                className="absolute pos-ingrid cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Ingrid" 
+              />
             </div>
           </div>
-        )}
+
+          {/* MOBILE: Grelha de fotos */}
+          <div className="grid grid-cols-2 gap-8 md:hidden place-items-center">
+            <img 
+              src="/prof-8.png" 
+              onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+              className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Professora" 
+            />
+            <img 
+              src="/meninos-8.png" 
+              onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+              className="w-[50vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Dupla" 
+            />
+            <img 
+              src="/rubs-8.png" 
+              onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+              className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Rubens" 
+            />
+            <img 
+              src="/ingrid-8.png" 
+              onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+              className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Ingrid" 
+            />
+          </div>
+        </div>
       </section>
 
-      <footer className="site-footer">
-        <div className="footer-brand">
-          <div className="unb-logo">UnB<span>★</span></div>
-          <div className="footer-divider" />
-          <div className="tedx-footer">TED<span>x</span></div>
+      {/* SECÇÃO INFORMAÇÕES */}
+      <section id="informacoes" className="w-full bg-[#b5b5b5] px-4 md:px-8 py-16">
+        <div className="max-w-screen-2xl mx-auto">
+          <h2 className="text-3xl lg:text-4xl font-normal mb-12 text-black">
+            Informações:
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-black mb-16">
+            {/* Data */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <h3 className="font-bold text-xl">Data:</h3>
+              </div>
+              <p className="font-bold text-sm">Dia 19 de<br />Novembro 2026</p>
+            </div>
+            
+            {/* Horário */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <h3 className="font-bold text-xl">Horário:</h3>
+              </div>
+              <ul className="font-bold text-sm list-disc pl-5">
+                <li>14h Credenciamento</li>
+                <li>15h Início das atividades</li>
+              </ul>
+            </div>
+            
+            {/* Localização */}
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <h3 className="font-bold text-xl">Localização:</h3>
+              </div>
+              <p className="font-bold text-sm">Centro de Excelência<br />em Turismo (CET/UnB)</p>
+            </div>
+          </div>
+
+          {/* Botão para redirecionar para a página de Ingressos */}
+          <div className="flex justify-center pb-12">
+            <Link 
+              href="/ingressos" 
+              className="bg-[#eb0028] text-white font-bold text-sm md:text-base px-8 py-4 tracking-wider hover:bg-red-700 transition-colors shadow-lg flex items-center gap-2 uppercase"
+            >
+              Garantir meu ingresso &rarr;
+            </Link>
+          </div>
         </div>
-        <p>Precisa de ajuda? Fale com a gente<br /><a href="mailto:suporte@tedxunb.com.br">suporte@tedxunb.com.br</a></p>
-        <span className="footer-year">© 2026 TEDx UnB</span>
+      </section>
+      
+      {/* RODAPÉ */}
+      <footer className="w-full bg-footer-gradient py-12 px-4 md:px-8 border-t border-black/10">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 md:gap-4 text-black text-sm">
+          <div className="flex flex-col items-center md:items-start gap-6">
+            <span className="font-normal text-xs uppercase tracking-widest">Realização:</span>
+            <div className="flex flex-col items-center md:items-start gap-6">
+              <img src="/logo-8.png" alt="Logos Instituto Latinoamerica e Ministério da Cultura" className="h-20 md:h-24 object-contain" />
+              <img src="/unb-8.png" alt="Logo Universidade de Brasília" className="h-16 md:h-20 object-contain" />
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-center text-center">
+            <span className="font-bold text-base">Dúvidas | Suporte</span>
+            <span className="text-base mt-1">unb.tedx@gmail.com</span>
+          </div>
+          
+          <div className="text-center md:text-right max-w-xs text-xs leading-relaxed">
+            Este evento TEDx é uma iniciativa independente,<br />realizada sob licença da TED.
+          </div>
+        </div>
       </footer>
-    </main>
+
+      {/* MODAL DE MINI-BIO */}
+      {activeSpeaker && (
+        <div 
+          className="fixed inset-0 bg-black/70 z-50 flex flex-col items-center justify-center p-6 backdrop-blur-sm transition-opacity duration-300"
+          onClick={closeBio}
+        >
+          <div 
+            className="bg-[#e5e5e5] rounded-xl p-8 w-[90%] max-w-sm relative shadow-2xl text-black border border-black/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button 
+              onClick={closeBio} 
+              className="absolute top-4 right-5 text-black/50 hover:text-red-600 text-3xl transition-colors font-light"
+            >
+              &times;
+            </button>
+            
+            <div className="flex flex-col items-center text-center mt-2">
+              <img 
+                src={activeSpeaker.imagemSrc} 
+                alt={activeSpeaker.nome} 
+                className="w-32 h-auto mb-5 drop-shadow-md rounded-full" 
+              />
+              <h3 className="text-2xl font-black tracking-tight mb-2">{activeSpeaker.nome}</h3>
+              <p className="text-black/70 leading-relaxed text-sm">{activeSpeaker.descricao}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
