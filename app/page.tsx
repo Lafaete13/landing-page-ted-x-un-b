@@ -93,8 +93,8 @@ export default function Home() {
       <section id="palestrantes" className="relative w-full bg-[#b2b2b2] pt-8 pb-12 flex-grow overflow-hidden border-b border-black">
         <div className="w-full relative min-h-[35vh] md:min-h-[55vh] flex flex-col justify-center">
           
-          {/* Título fixado na esquerda */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-black relative pl-[5%] mb-2 md:mb-0 md:absolute md:top-4 md:left-[5%] md:pl-0 z-20">
+          {/* Título fixado na esquerda com tamanho reduzido */}
+          <h2 className="text-[15px] md:text-[30px] font-black tracking-tight text-black relative pl-[5%] mb-2 md:mb-0 md:absolute md:top-4 md:left-[5%] md:pl-0 z-20">
             Palestrantes:
           </h2>
 

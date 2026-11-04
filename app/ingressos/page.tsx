@@ -94,12 +94,11 @@ export default function IngressosPage() {
   async function downloadTicketPNG() {
     if (!ticketRef.current) return
 
-    // Rolagem para o topo garante que o canvas capture tudo sem cortes
     window.scrollTo(0, 0)
     
     const canvas = await html2canvas(ticketRef.current, {
-      backgroundColor: '#ffffff', // Fundo branco forçado para evitar bordas pretas
-      scale: 3, // Alta resolução
+      backgroundColor: '#ffffff',
+      scale: 3, 
       useCORS: true,
       logging: false,
     })
@@ -247,7 +246,7 @@ export default function IngressosPage() {
               <h2>Nos vemos no TEDx!</h2>
               <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento.</p>
               
-              {/* MODELO DO INGRESSO RENDERIZADO EM ALTA QUALIDADE VETORIAL */}
+              {/* MODELO DO INGRESSO RENDERIZADO */}
               <div
                 ref={ticketRef}
                 style={{
@@ -263,117 +262,73 @@ export default function IngressosPage() {
                   overflow: 'hidden', 
                 }}
               >
-                {/* Template Imagem de Fundo */}
+                {/* Template Imagem de Fundo (Com logo, título e "Ingresso de:" já fixos) */}
                 <img
                   src="/ingresso-template.png"
                   alt="Template Ingresso TEDx"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
 
-                {/* LOGO SUPERIOR ESQUERDA (Subimos a porcentagem para travar no PDF) */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '3.5%', /* Voltou para 3.5% para compensar a descida no canvas */
-                    left: '6%',
-                    textAlign: 'left',
-                    lineHeight: '1.1',
-                    margin: 0,
-                    padding: 0,
-                  }}
-                >
-                  <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#eb0028', position: 'relative', display: 'inline-block' }}>
-                    TED
-                    <span 
-                      style={{ 
-                        fontStyle: 'italic', 
-                        fontSize: '0.9rem', 
-                        position: 'absolute', 
-                        top: '-0.1rem', 
-                        left: '100%',   
-                        marginLeft: '1px' 
-                      }}
-                    >
-                      x
-                    </span>
+                {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) - ALINHADAS PELO TOPO */}
+                <div style={{
+                  position: 'absolute',
+                  top: '21%', /* Ajuste se precisar subir/descer as 3 juntas */
+                  left: '0',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'flex-start', /* Trava o alinhamento de todas pelo topo */
+                  justifyContent: 'space-between', 
+                  padding: '0 8%', /* Dá a margem exata nas laterais */
+                  color: '#111',
+                  boxSizing: 'border-box'
+                }}>
+                  {/* COLUNA 1: DATA */}
+                  <div style={{ textAlign: 'center', width: '30%' }}>
+                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
+                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>19</div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: '500', color: '#111', marginTop: '2px' }}>
-                    Universidade<br />de Brasília
+
+                  {/* COLUNA 2: HORÁRIO */}
+                  <div style={{ textAlign: 'center', width: '30%' }}>
+                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
+                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>14h</div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
+                  </div>
+
+                  {/* COLUNA 3: LOCAL */}
+                  <div style={{ textAlign: 'center', width: '30%' }}>
+                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
+                    <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '3px' }}>Centro de<br />Excelência<br />em Turismo</div>
+                    <div style={{ fontSize: '0.58rem', marginTop: '3px', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
-
-                {/* TEMA SUPERIOR DIREITO */}
+                {/* NOME DO PARTICIPANTE DINÂMICO */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '3.5%',  /* Mesmo valor exato do logo do TEDx */
-                    right: '6%',  
-                    textAlign: 'left', 
-                    fontSize: '0.62rem',
-                    lineHeight: '1.3',
-                    color: '#111',
-                    whiteSpace: 'nowrap',
-                    margin: 0,
-                    padding: 0,
-                  }}
-                >
-                  <div style={{ fontWeight: '700' }}>Vários Futuros:</div>
-                  <div style={{ fontWeight: '400' }}>Pluriverso de</div>
-                  <div style={{ fontWeight: '400' }}>Narrativas Fundadoras</div>
-                </div>
-
-                {/* COLUNA 1: DATA */}
-                <div style={{ position: 'absolute', top: '21%', left: '18%', transform: 'translateX(-50%)', textAlign: 'center', color: '#111' }}>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
-                  <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>19</div>
-                  <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
-                </div>
-
-                {/* COLUNA 2: HORÁRIO */}
-                <div style={{ position: 'absolute', top: '21%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', color: '#111' }}>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
-                  <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>14h</div>
-                  <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
-                </div>
-
-                {/* COLUNA 3: LOCAL */}
-                <div style={{ position: 'absolute', top: '21%', left: '82%', transform: 'translateX(-50%)', textAlign: 'center', color: '#111' }}>
-                  <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                  <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '3px' }}>Centro de<br />Excelência<br />em Turismo</div>
-                  <div style={{ fontSize: '0.58rem', marginTop: '3px', fontWeight: '500' }}>CET - UnB</div>
-                </div>
-
-                {/* FAIXA: "Ingresso de: NOME DO PARTICIPANTE" */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '39.5%', /* Subimos para 39.5% para não cair fora da faixa no PDF */
-                    left: '6%',   
-                    width: '88%',
+                    top: '41.5%', /* Subimos o valor para compensar a queda na hora de baixar */
+                    left: '26%',  
+                    width: '68%',
                     textAlign: 'left',
                     color: '#111',
                     whiteSpace: 'nowrap',
-                    
-                    /* CORREÇÕES PARA O CANVAS NÃO EMPURRAR O TEXTO: */
-                    lineHeight: '1.2',  /* Valor numérico fixo trava o pulo da fonte */
+                    lineHeight: '1', /* Travado em 1 para o html2canvas não adicionar margem fantasma */
                     overflow: 'visible',
                     margin: 0,
-                    padding: 0, /* Removemos os paddings que causavam a descida fantasma */
+                    padding: 0,
                   }}
                 >
-                  <span style={{ fontSize: '0.75rem', fontWeight: '700', marginRight: '6px' }}>
-                    Ingresso de:
-                  </span>
                   <span style={{ fontSize: '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
                     {attendeeName}
                   </span>
                 </div>
 
-                {/* QR CODE DINÂMICO (Minimalista com Borda para PDF) */}
+                {/* QR CODE DINÂMICO */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '64.5%',
+                    top: '68%', 
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     backgroundColor: '#fff',
@@ -430,18 +385,18 @@ export default function IngressosPage() {
             <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
             
             <div className="flex flex-col items-start gap-2.5">
-              {/* Logo do Instituto Latinoamerica (maior) */}
+              {/* Logo do Instituto Latinoamerica */}
               <img 
                 src="/logo-8.png" 
                 alt="Instituto Latinoamerica" 
-                className="h-15 md:h-25 w-auto object-contain" 
+                className="h-10 md:h-12 w-auto object-contain" 
               />
               
-              {/* Logo da UnB (ajustada para acompanhar harmonicamente) */}
+              {/* Logo da UnB */}
               <img 
                 src="/unb-8.png" 
                 alt="Universidade de Brasília" 
-                className="h-7 md:h-8 w-auto object-contain" 
+                className="h-6 md:h-7 w-auto object-contain" 
               />
             </div>
           </div>
