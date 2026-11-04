@@ -258,9 +258,9 @@ export default function IngressosPage() {
                   fontFamily: 'Inter, Arial, sans-serif',
                   color: '#000',
                   userSelect: 'none',
-                  backgroundColor: '#fff', // Fundo garantido para o canvas
-                  borderRadius: '16px', // Borda no container pai
-                  overflow: 'hidden', // Evita vazamentos na renderização
+                  backgroundColor: '#fff', 
+                  borderRadius: '16px', 
+                  overflow: 'hidden', 
                 }}
               >
                 {/* Template Imagem de Fundo */}
@@ -270,21 +270,34 @@ export default function IngressosPage() {
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
 
-                {/* LOGO SUPERIOR ESQUERDA (Com vermelho oficial EB0028) */}
+                {/* LOGO SUPERIOR ESQUERDA (Subimos a porcentagem para travar no PDF) */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '3.5%',
+                    top: '3.5%', /* Voltou para 3.5% para compensar a descida no canvas */
                     left: '6%',
-                    lineHeight: '1.1',
                     textAlign: 'left',
+                    lineHeight: '1.1',
+                    margin: 0,
+                    padding: 0,
                   }}
                 >
-                  <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
-                    <span style={{ color: '#eb0028', fontWeight: '900' }}>TED</span>
-                    <span style={{ color: '#eb0028', fontStyle: 'italic', fontSize: '0.95rem', verticalAlign: 'super' }}>x</span>
+                  <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#eb0028', position: 'relative', display: 'inline-block' }}>
+                    TED
+                    <span 
+                      style={{ 
+                        fontStyle: 'italic', 
+                        fontSize: '0.9rem', 
+                        position: 'absolute', 
+                        top: '-0.1rem', 
+                        left: '100%',   
+                        marginLeft: '1px' 
+                      }}
+                    >
+                      x
+                    </span>
                   </div>
-                  <div style={{ fontSize: '0.8rem', fontWeight: '500', color: '#111' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: '500', color: '#111', marginTop: '2px' }}>
                     Universidade<br />de Brasília
                   </div>
                 </div>
@@ -293,84 +306,62 @@ export default function IngressosPage() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: '3.5%',
-                    right: '6%',
-                    textAlign: 'right',
+                    top: '3.5%',  /* Mesmo valor exato do logo do TEDx */
+                    right: '6%',  
+                    textAlign: 'left', 
                     fontSize: '0.62rem',
-                    lineHeight: '1.2',
+                    lineHeight: '1.3',
                     color: '#111',
+                    whiteSpace: 'nowrap',
+                    margin: 0,
+                    padding: 0,
                   }}
                 >
-                  <div><strong style={{ fontWeight: '700' }}>Vários Futuros:</strong></div>
-                  <div>Pluriverso de</div>
-                  <div>Narrativas Fundadoras</div>
+                  <div style={{ fontWeight: '700' }}>Vários Futuros:</div>
+                  <div style={{ fontWeight: '400' }}>Pluriverso de</div>
+                  <div style={{ fontWeight: '400' }}>Narrativas Fundadoras</div>
                 </div>
 
                 {/* COLUNA 1: DATA */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '20%',
-                    left: '18%',
-                    transform: 'translateX(-50%)',
-                    textAlign: 'center',
-                    color: '#111',
-                  }}
-                >
+                <div style={{ position: 'absolute', top: '21%', left: '18%', transform: 'translateX(-50%)', textAlign: 'center', color: '#111' }}>
                   <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
                   <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>19</div>
-                  <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>
-                    Novembro<br />2026
-                  </div>
+                  <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                 </div>
 
                 {/* COLUNA 2: HORÁRIO */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '20%',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    textAlign: 'center',
-                    color: '#111',
-                  }}
-                >
+                <div style={{ position: 'absolute', top: '21%', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', color: '#111' }}>
                   <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
                   <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>14h</div>
                   <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
                 </div>
 
                 {/* COLUNA 3: LOCAL */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '20%',
-                    left: '82%',
-                    transform: 'translateX(-50%)',
-                    textAlign: 'center',
-                    color: '#111',
-                  }}
-                >
+                <div style={{ position: 'absolute', top: '21%', left: '82%', transform: 'translateX(-50%)', textAlign: 'center', color: '#111' }}>
                   <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                  <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '3px' }}>
-                    Centro de<br />Excelência<br />em Turismo
-                  </div>
+                  <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '3px' }}>Centro de<br />Excelência<br />em Turismo</div>
                   <div style={{ fontSize: '0.58rem', marginTop: '3px', fontWeight: '500' }}>CET - UnB</div>
                 </div>
 
                 {/* FAIXA: "Ingresso de: NOME DO PARTICIPANTE" */}
-                {/* Removido o flex e alinhamento complexo para garantir a renderização plana do html2canvas */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '39%',
-                    left: '6%',
+                    top: '39.5%', /* Subimos para 39.5% para não cair fora da faixa no PDF */
+                    left: '6%',   
                     width: '88%',
+                    textAlign: 'left',
                     color: '#111',
-                    lineHeight: '1',
+                    whiteSpace: 'nowrap',
+                    
+                    /* CORREÇÕES PARA O CANVAS NÃO EMPURRAR O TEXTO: */
+                    lineHeight: '1.2',  /* Valor numérico fixo trava o pulo da fonte */
+                    overflow: 'visible',
+                    margin: 0,
+                    padding: 0, /* Removemos os paddings que causavam a descida fantasma */
                   }}
                 >
-                  <span style={{ fontSize: '0.72rem', fontWeight: 'bold', marginRight: '6px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '700', marginRight: '6px' }}>
                     Ingresso de:
                   </span>
                   <span style={{ fontSize: '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
@@ -378,8 +369,7 @@ export default function IngressosPage() {
                   </span>
                 </div>
 
-                {/* QR CODE DINÂMICO (Minimalista com Borda) */}
-                {/* Simplificada a caixa de sombra e usando borda real arredondada para o download não quebrar */}
+                {/* QR CODE DINÂMICO (Minimalista com Borda para PDF) */}
                 <div
                   style={{
                     position: 'absolute',
@@ -389,7 +379,7 @@ export default function IngressosPage() {
                     backgroundColor: '#fff',
                     padding: '8px',
                     borderRadius: '12px',
-                    border: '1px solid #e5e5e5', // Borda leve para substituir a sombra
+                    border: '1px solid #e5e5e5',
                   }}
                 >
                   {qrCodeUrl ? (
@@ -404,29 +394,10 @@ export default function IngressosPage() {
                 </div>
 
                 {/* RODAPÉ COLORIDO: UnB e 2026 */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '3.5%',
-                    left: '6%',
-                    fontSize: '0.75rem',
-                    fontWeight: 'bold',
-                    color: '#111',
-                  }}
-                >
+                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: '0.75rem', fontWeight: 'bold', color: '#111' }}>
                   UnB
                 </div>
-
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '3.5%',
-                    right: '6%',
-                    fontSize: '0.75rem',
-                    fontWeight: 'bold',
-                    color: '#111',
-                  }}
-                >
+                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: '0.75rem', fontWeight: 'bold', color: '#111' }}>
                   2026
                 </div>
               </div>
