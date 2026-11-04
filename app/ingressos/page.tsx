@@ -1,15 +1,13 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import Link from 'next/link'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
 import {
   ArrowRight,
-  CalendarDays,
   Check,
-  Clock3,
   Download,
-  MapPin,
   Ticket,
   X,
 } from 'lucide-react'
@@ -36,16 +34,7 @@ function QrCode() {
   )
 }
 
-function InfoItem({ icon: Icon, label, children }: { icon: typeof CalendarDays; label: string; children: React.ReactNode }) {
-  return (
-    <div className="info-item">
-      <div className="info-icon"><Icon size={18} strokeWidth={1.8} /></div>
-      <div><span>{label}</span><strong>{children}</strong></div>
-    </div>
-  )
-}
-
-export default function Page() {
+export default function IngressosPage() {
   const [tipoParticipante, setTipoParticipante] = useState<'aluno' | 'externo'>('aluno')
   const [submitted, setSubmitted] = useState(false)
   const [attendeeName, setAttendeeName] = useState('')
@@ -102,36 +91,38 @@ export default function Page() {
     }
   }
 
-  // Função para baixar como Imagem PNG
   async function downloadTicketPNG() {
     if (!ticketRef.current) return
 
+    // Rolagem para o topo garante que o canvas capture tudo sem cortes
+    window.scrollTo(0, 0)
+    
     const canvas = await html2canvas(ticketRef.current, {
-      backgroundColor: null,
-      scale: 3,
+      backgroundColor: '#ffffff', // Fundo branco forçado para evitar bordas pretas
+      scale: 3, // Alta resolução
       useCORS: true,
       logging: false,
-      allowTaint: true,
     })
 
     const link = document.createElement('a')
     link.download = `ingresso-tedx-unb-${attendeeName.toLowerCase().replace(/\s+/g, '-')}.png`
-    link.href = canvas.toDataURL('image/png')
+    link.href = canvas.toDataURL('image/png', 1.0)
     link.click()
   }
 
-  // Função para baixar como arquivo PDF
   async function downloadTicketPDF() {
     if (!ticketRef.current) return
 
+    window.scrollTo(0, 0)
+
     const canvas = await html2canvas(ticketRef.current, {
+      backgroundColor: '#ffffff',
       scale: 3,
       useCORS: true,
       logging: false,
-      allowTaint: true,
     })
 
-    const imgData = canvas.toDataURL('image/png')
+    const imgData = canvas.toDataURL('image/png', 1.0)
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'px',
@@ -143,191 +134,353 @@ export default function Page() {
   }
 
   return (
-    <main className="site-shell">
-      <div className="background-glow" aria-hidden="true" />
-      <header className="topbar">
-        <div className="tedx-mark"><b>TED</b><span>x</span></div>
-        <div className="topbar-label">Universidade de Brasília <i /></div>
-      </header>
-
-      <section className="hero-section">
-        <div className="hero-copy">
-          <p className="eyebrow"><span /> Um evento para imaginar novos caminhos</p>
-          <h1>TEDx <em>Universidade</em><br />de Brasília</h1>
-          <p className="hero-description">Pensar sobre os futuros e propor um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.</p>
-          <div className="event-details">
-            <InfoItem icon={CalendarDays} label="Data">Dia 19</InfoItem>
-            <InfoItem icon={Clock3} label="Horário">Credenciamento às 14h <small>|</small> Início às 15h</InfoItem>
-            <InfoItem icon={MapPin} label="Local">Centro de Excelência em Turismo <small>(CET/UnB)</small></InfoItem>
+    <div className="antialiased flex flex-col min-h-screen bg-[#b2b2b2]">
+      {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
+      <nav className="w-full bg-black py-6 px-6 md:px-12 z-50 border-b border-gray-800">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center">
+          <div className="mb-4 md:mb-0">
+            <Link href="/">
+              <h1 className="text-2xl font-bold text-white leading-none cursor-pointer">
+                <span className="text-[#e8474a] font-black">TEDx</span><br />
+                <span className="font-normal text-gray-300">Universidade<br />de Brasília</span>
+              </h1>
+            </Link>
+          </div>
+          
+          <div className="flex items-center gap-4 md:gap-6 text-white font-medium text-sm md:text-base">
+            <Link href="/" className="hover:text-[#e8474a] transition-colors pr-4 md:pr-6 border-r border-gray-700">
+              Sobre
+            </Link>
+            <span className="font-bold text-[#e8474a]">
+              Ingressos
+            </span>
           </div>
         </div>
-        <div className="hero-stamp" aria-hidden="true"><span>IDEAS<br /><b>WORTH</b><br />SPREADING</span><i>×</i></div>
-      </section>
+      </nav>
 
-      <section className="registration-section" id="inscricao">
-        {!submitted ? (
-          <form className="registration-card" onSubmit={handleSubmit}>
-            <div className="card-heading">
-              <div className="ticket-icon"><Ticket size={21} /></div>
-              <div><p className="card-kicker">A entrada é gratuita</p><h2>Garanta seu ingresso</h2></div>
-            </div>
-            <p className="card-intro">Preencha seus dados para viver essa conversa sobre futuros.</p>
+      {/* SECÇÃO DO FORMULÁRIO DE INSCRIÇÃO */}
+      <main className="flex-grow flex items-center justify-center py-12 px-4 md:px-8">
+        <section className="w-full max-w-xl">
+          {!submitted ? (
+            <form className="registration-card" onSubmit={handleSubmit}>
+              <div className="card-heading">
+                <div className="ticket-icon" style={{ color: '#e8474a', borderColor: '#e8474a' }}>
+                  <Ticket size={21} />
+                </div>
+                <div>
+                  <p className="card-kicker" style={{ color: '#e8474a' }}>A entrada é gratuita</p>
+                  <h2>Garanta seu ingresso</h2>
+                </div>
+              </div>
+              <p className="card-intro">Preencha seus dados para viver essa conversa sobre futuros.</p>
 
-            {/* Seleção Obrigatória do Tipo de Participante */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-              <button
-                type="button"
-                onClick={() => setTipoParticipante('aluno')}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: tipoParticipante === 'aluno' ? '2px solid #eb0028' : '1px solid #333',
-                  backgroundColor: tipoParticipante === 'aluno' ? 'rgba(235, 0, 40, 0.15)' : '#181818',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Aluno UnB
-              </button>
-              <button
-                type="button"
-                onClick={() => setTipoParticipante('externo')}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  borderRadius: '8px',
-                  border: tipoParticipante === 'externo' ? '2px solid #eb0028' : '1px solid #333',
-                  backgroundColor: tipoParticipante === 'externo' ? 'rgba(235, 0, 40, 0.15)' : '#181818',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
-              >
-                Comunidade Externa
-              </button>
-            </div>
-
-            <div className="form-grid">
-              <label>Nome completo<input name="name" type="text" placeholder="Como podemos te chamar?" required /></label>
-              <label>CPF (para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" required /></label>
-              <label>E-mail<input name="email" type="email" placeholder="voce@email.com" required /></label>
-              <label>Confirmar e-mail<input name="confirmation" type="email" placeholder="Digite seu e-mail novamente" required onChange={() => setEmailError('')} /></label>
-              <label>Data de nascimento<input name="birthdate" type="date" required /></label>
-
-              {tipoParticipante === 'aluno' && (
-                <>
-                  <label>Curso<input name="course" type="text" placeholder="Ex.: Comunicação Social" required /></label>
-                  <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
-                </>
-              )}
-            </div>
-
-            {emailError && <p className="form-error" role="alert">{emailError}</p>}
-
-            <button className="submit-button" type="submit" disabled={loading} style={{ marginTop: '20px' }}>
-              {loading ? 'Gerando ingresso...' : <>Garantir meu ingresso <ArrowRight size={18} /></>}
-            </button>
-            <p className="privacy-note"><span>⌁</span> Seus dados serão usados apenas para o credenciamento do evento.</p>
-          </form>
-        ) : (
-          <div className="success-card" role="status">
-            <button className="close-button" onClick={() => setSubmitted(false)} aria-label="Fechar confirmação"><X size={19} /></button>
-            <div className="success-check"><Check size={23} /></div>
-            <p className="card-kicker">Ingresso confirmado</p>
-            <h2>Nos vemos no TEDx!</h2>
-            <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento.</p>
-            
-            {/* Modelo do Ingresso baseado na Arte Oficial da Fernanda */}
-            <div
-              ref={ticketRef}
-              style={{
-                position: 'relative',
-                width: '100%',
-                maxWidth: '430px',
-                margin: '0 auto',
-                fontFamily: 'sans-serif',
-              }}
-            >
-              {/* Imagem limpa enviada pela Fernanda */}
-              <img
-                src="/ingresso-template.png"
-                alt="Template Ingresso TEDx"
-                style={{ width: '100%', height: 'auto', display: 'block', borderRadius: '16px' }}
-              />
-
-              {/* Nome do Participante (Posicionado logo abaixo de "Ingresso de:") */}
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '47%',
-                  left: '7%',
-                  right: '7%',
-                  fontSize: '1.15rem',
-                  fontWeight: 'bold',
-                  color: '#111',
-                  textTransform: 'uppercase',
-                  textAlign: 'left',
-                }}
-              >
-                {attendeeName}
+              {/* SELEÇÃO DO TIPO DE PARTICIPANTE */}
+              <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+                <button
+                  type="button"
+                  onClick={() => setTipoParticipante('aluno')}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: tipoParticipante === 'aluno' ? '2px solid #e8474a' : '1px solid #333',
+                    backgroundColor: tipoParticipante === 'aluno' ? 'rgba(232, 71, 74, 0.18)' : '#181818',
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  Aluno UnB
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setTipoParticipante('externo')}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    borderRadius: '8px',
+                    border: tipoParticipante === 'externo' ? '2px solid #e8474a' : '1px solid #333',
+                    backgroundColor: tipoParticipante === 'externo' ? 'rgba(232, 71, 74, 0.18)' : '#181818',
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  Comunidade Externa
+                </button>
               </div>
 
-              {/* QR Code Dinâmico (Centralizado na área branca) */}
+              <div className="form-grid">
+                <label>Nome completo<input name="name" type="text" placeholder="Como podemos te chamar?" required /></label>
+                <label>CPF (para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" required /></label>
+                <label>E-mail<input name="email" type="email" placeholder="voce@email.com" required /></label>
+                <label>Confirmar e-mail<input name="confirmation" type="email" placeholder="Digite seu e-mail novamente" required onChange={() => setEmailError('')} /></label>
+                <label>Data de nascimento<input name="birthdate" type="date" required /></label>
+
+                {tipoParticipante === 'aluno' && (
+                  <>
+                    <label>Curso<input name="course" type="text" placeholder="Ex.: Comunicação Social" required /></label>
+                    <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
+                  </>
+                )}
+              </div>
+
+              {emailError && <p className="form-error" role="alert">{emailError}</p>}
+
+              <button 
+                className="submit-button" 
+                type="submit" 
+                disabled={loading} 
+                style={{ marginTop: '20px', backgroundColor: '#e8474a' }}
+              >
+                {loading ? 'Gerando ingresso...' : <>Garantir meu ingresso <ArrowRight size={18} /></>}
+              </button>
+              <p className="privacy-note"><span style={{ color: '#e8474a' }}>⌁</span> Seus dados serão usados apenas para o credenciamento do evento.</p>
+            </form>
+          ) : (
+            <div className="success-card" role="status">
+              <button className="close-button" onClick={() => setSubmitted(false)} aria-label="Fechar confirmação"><X size={19} /></button>
+              <div className="success-check" style={{ backgroundColor: '#e8474a' }}><Check size={23} /></div>
+              <p className="card-kicker" style={{ color: '#e8474a' }}>Ingresso confirmado</p>
+              <h2>Nos vemos no TEDx!</h2>
+              <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento.</p>
+              
+              {/* MODELO DO INGRESSO RENDERIZADO EM ALTA QUALIDADE VETORIAL */}
               <div
+                ref={ticketRef}
                 style={{
-                  position: 'absolute',
-                  top: '63%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  backgroundColor: '#fff',
-                  padding: '8px',
-                  borderRadius: '10px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.12)',
+                  position: 'relative',
+                  width: '100%',
+                  maxWidth: '430px',
+                  margin: '0 auto',
+                  fontFamily: 'Inter, Arial, sans-serif',
+                  color: '#000',
+                  userSelect: 'none',
+                  backgroundColor: '#fff', // Fundo garantido para o canvas
+                  borderRadius: '16px', // Borda no container pai
+                  overflow: 'hidden', // Evita vazamentos na renderização
                 }}
               >
-                {qrCodeUrl ? (
+                {/* Template Imagem de Fundo */}
                 <img
-                  src={qrCodeUrl}
-                  alt="QR Code do Ingresso"
-                  style={{ width: '140px', height: '140px', display: 'block' }}
+                  src="/ingresso-template.png"
+                  alt="Template Ingresso TEDx"
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
-              ) : (
-                <QrCode />
-              )}
+
+                {/* LOGO SUPERIOR ESQUERDA (Com vermelho oficial EB0028) */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '3.5%',
+                    left: '6%',
+                    lineHeight: '1.1',
+                    textAlign: 'left',
+                  }}
+                >
+                  <div style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>
+                    <span style={{ color: '#eb0028', fontWeight: '900' }}>TED</span>
+                    <span style={{ color: '#eb0028', fontStyle: 'italic', fontSize: '0.95rem', verticalAlign: 'super' }}>x</span>
+                  </div>
+                  <div style={{ fontSize: '0.8rem', fontWeight: '500', color: '#111' }}>
+                    Universidade<br />de Brasília
+                  </div>
+                </div>
+
+                {/* TEMA SUPERIOR DIREITO */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '3.5%',
+                    right: '6%',
+                    textAlign: 'right',
+                    fontSize: '0.62rem',
+                    lineHeight: '1.2',
+                    color: '#111',
+                  }}
+                >
+                  <div><strong style={{ fontWeight: '700' }}>Vários Futuros:</strong></div>
+                  <div>Pluriverso de</div>
+                  <div>Narrativas Fundadoras</div>
+                </div>
+
+                {/* COLUNA 1: DATA */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '20%',
+                    left: '18%',
+                    transform: 'translateX(-50%)',
+                    textAlign: 'center',
+                    color: '#111',
+                  }}
+                >
+                  <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
+                  <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>19</div>
+                  <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>
+                    Novembro<br />2026
+                  </div>
+                </div>
+
+                {/* COLUNA 2: HORÁRIO */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '20%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    textAlign: 'center',
+                    color: '#111',
+                  }}
+                >
+                  <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
+                  <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>14h</div>
+                  <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
+                </div>
+
+                {/* COLUNA 3: LOCAL */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '20%',
+                    left: '82%',
+                    transform: 'translateX(-50%)',
+                    textAlign: 'center',
+                    color: '#111',
+                  }}
+                >
+                  <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
+                  <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '3px' }}>
+                    Centro de<br />Excelência<br />em Turismo
+                  </div>
+                  <div style={{ fontSize: '0.58rem', marginTop: '3px', fontWeight: '500' }}>CET - UnB</div>
+                </div>
+
+                {/* FAIXA: "Ingresso de: NOME DO PARTICIPANTE" */}
+                {/* Removido o flex e alinhamento complexo para garantir a renderização plana do html2canvas */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '39%',
+                    left: '6%',
+                    width: '88%',
+                    color: '#111',
+                    lineHeight: '1',
+                  }}
+                >
+                  <span style={{ fontSize: '0.72rem', fontWeight: 'bold', marginRight: '6px' }}>
+                    Ingresso de:
+                  </span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
+                    {attendeeName}
+                  </span>
+                </div>
+
+                {/* QR CODE DINÂMICO (Minimalista com Borda) */}
+                {/* Simplificada a caixa de sombra e usando borda real arredondada para o download não quebrar */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '64.5%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    backgroundColor: '#fff',
+                    padding: '8px',
+                    borderRadius: '12px',
+                    border: '1px solid #e5e5e5', // Borda leve para substituir a sombra
+                  }}
+                >
+                  {qrCodeUrl ? (
+                    <img
+                      src={qrCodeUrl}
+                      alt="QR Code do Ingresso"
+                      style={{ width: '130px', height: '130px', display: 'block', borderRadius: '4px' }}
+                    />
+                  ) : (
+                    <QrCode />
+                  )}
+                </div>
+
+                {/* RODAPÉ COLORIDO: UnB e 2026 */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '3.5%',
+                    left: '6%',
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    color: '#111',
+                  }}
+                >
+                  UnB
+                </div>
+
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: '3.5%',
+                    right: '6%',
+                    fontSize: '0.75rem',
+                    fontWeight: 'bold',
+                    color: '#111',
+                  }}
+                >
+                  2026
+                </div>
+              </div>
+
+              {/* BOTÕES DE DOWNLOAD */}
+              <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
+                <button className="download-button" onClick={downloadTicketPNG} style={{ flex: 1 }}>
+                  <Download size={17} /> Baixar PNG
+                </button>
+                <button className="download-button" onClick={downloadTicketPDF} style={{ flex: 1, backgroundColor: '#222', borderColor: '#444' }}>
+                  <Download size={17} /> Baixar PDF
+                </button>
+              </div>
+
+              <div className="notice" style={{ borderLeftColor: '#e8474a', backgroundColor: 'rgba(232, 71, 74, 0.08)' }}>
+                <strong style={{ color: '#e8474a' }}>Importante</strong>
+                <p>O credenciamento será iniciado às 14h no CET/UnB. Chegue com antecedência para validar seu ingresso antes do início das apresentações às 15h.</p>
+              </div>
+            </div>
+          )}
+        </section>
+      </main>
+
+      {/* RODAPÉ COM LOGOS EM COLUNA */}
+      <footer className="w-full bg-black text-white py-12 px-6 md:px-12 border-t border-gray-800">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-sm">
+          
+          <div className="flex flex-col items-center md:items-start gap-3">
+            <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
+            <div className="flex flex-col items-center md:items-start gap-4">
+              <img 
+                src="/logo-8.png" 
+                alt="Ministério da Cultura" 
+                className="h-10 md:h-12 w-auto object-contain" 
+              />
+              <img 
+                src="/unb-8.png" 
+                alt="Universidade de Brasília" 
+                className="h-6 md:h-7 w-auto object-contain" 
+              />
             </div>
           </div>
-
-            {/* Botões para download em PNG ou PDF */}
-            <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
-              <button className="download-button" onClick={downloadTicketPNG} style={{ flex: 1 }}>
-                <Download size={17} /> Baixar PNG
-              </button>
-              <button className="download-button" onClick={downloadTicketPDF} style={{ flex: 1, backgroundColor: '#222', borderColor: '#444' }}>
-                <Download size={17} /> Baixar PDF
-              </button>
-            </div>
-
-            <div className="notice">
-              <strong>Importante</strong>
-              <p>O credenciamento será iniciado às 14h no CET/UnB. Chegue com antecedência para validar seu ingresso antes do início das apresentações às 15h.</p>
-            </div>
+          
+          <div className="flex flex-col items-center text-center">
+            <span className="font-bold text-base text-white">Dúvidas | Suporte</span>
+            <span className="text-base mt-1 text-gray-300">unb.tedx@gmail.com</span>
           </div>
-        )}
-      </section>
-
-      <footer className="site-footer">
-        <div className="footer-brand">
-          <div className="unb-logo">UnB<span>★</span></div>
-          <div className="footer-divider" />
-          <div className="tedx-footer">TED<span>x</span></div>
+          
+          <div className="text-center md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
+            Este evento TEDx é uma iniciativa independente,<br />realizada sob licença da TED.
+          </div>
+          
         </div>
-        <p>Precisa de ajuda? Fale com a gente<br /><a href="mailto:suporte@tedxunb.com.br">suporte@tedxunb.com.br</a></p>
-        <span className="footer-year">© 2026 TEDx UnB</span>
       </footer>
-    </main>
+    </div>
   )
 }

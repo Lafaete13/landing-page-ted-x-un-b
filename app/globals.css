@@ -167,16 +167,15 @@ input:focus { border-color: var(--red); box-shadow: 0 0 0 2px rgba(235,0,40,.12)
   background: linear-gradient(90deg, #dce462 0%, #7db979 25%, #cb84bb 60%, #e5764c 100%);
 }
 
-.pos-prof { top: 20%; left: 18.5%; width: 16%; } 
-.pos-meninos { top: 8%; left: 64.5%; width: 25%; } 
-.pos-rubs { top: 70%; left: 21%; width: 16%; } 
-.pos-ingrid { top: 54%; left: 80.5%; width: 16%; } 
+.pos-prof { top: 18%; left: 13.5%; width: 16%; } 
+.pos-meninos { top: 4%; left: 62.5%; width: 25%; } 
+.pos-rubs { top: 65%; left: 11.5%; width: 16%; } 
+.pos-ingrid { top: 54%; left: 87.5%; width: 16%; } 
 
 .path-wrapper {
   position: relative;
   display: inline-block; 
   width: 100%;
-  max-width: 85%; 
 }
 
 @media (max-width: 760px) { 
