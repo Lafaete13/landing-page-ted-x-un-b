@@ -421,33 +421,40 @@ export default function IngressosPage() {
         </section>
       </main>
 
-      {/* RODAPÉ COM LOGOS EM COLUNA */}
-      <footer className="w-full bg-black text-white py-12 px-6 md:px-12 border-t border-gray-800">
-        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-sm">
+      {/* RODAPÉ */}
+      <footer className="w-full bg-black text-white py-10 px-6 md:px-12 border-t border-black">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-sm">
           
-          <div className="flex flex-col items-center md:items-start gap-3">
+          {/* BLOCO 1: Realização (Empilhado: Latinoamerica em cima, UnB em baixo) */}
+          <div className="flex flex-col gap-3">
             <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
-            <div className="flex flex-col items-center md:items-start gap-4">
+            
+            <div className="flex flex-col items-start gap-2.5">
+              {/* Logo do Instituto Latinoamerica (maior) */}
               <img 
                 src="/logo-8.png" 
-                alt="Ministério da Cultura" 
-                className="h-10 md:h-12 w-auto object-contain" 
+                alt="Instituto Latinoamerica" 
+                className="h-15 md:h-25 w-auto object-contain" 
               />
+              
+              {/* Logo da UnB (ajustada para acompanhar harmonicamente) */}
               <img 
                 src="/unb-8.png" 
                 alt="Universidade de Brasília" 
-                className="h-6 md:h-7 w-auto object-contain" 
+                className="h-7 md:h-8 w-auto object-contain" 
               />
             </div>
           </div>
           
-          <div className="flex flex-col items-center text-center">
+          {/* BLOCO 2: Dúvidas / Suporte */}
+          <div className="flex flex-col items-start md:items-center text-left md:text-center">
             <span className="font-bold text-base text-white">Dúvidas | Suporte</span>
             <span className="text-base mt-1 text-gray-300">unb.tedx@gmail.com</span>
           </div>
           
-          <div className="text-center md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
-            Este evento TEDx é uma iniciativa independente,<br />realizada sob licença da TED.
+          {/* BLOCO 3: Nota da Licença TED */}
+          <div className="text-left md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
+            Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
           </div>
           
         </div>

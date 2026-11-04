@@ -23,151 +23,147 @@ export default function Home() {
   return (
     <div className="antialiased flex flex-col min-h-screen bg-[#b2b2b2]">
       {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
-      <nav className="w-full bg-black py-6 px-6 md:px-12 z-50 border-b border-gray-800">
-        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <h1 className="text-2xl font-bold text-white leading-none">
+      <nav className="w-full bg-black py-4 px-4 md:px-12 z-50 border-b border-gray-800">
+        <div className="max-w-screen-2xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
+          
+          {/* Logo */}
+          <div className="text-center sm:text-left">
+            <h1 className="text-xl md:text-2xl font-bold text-white leading-none">
               <span className="text-[#e8474a] font-black">TEDx</span><br />
               <span className="font-normal text-gray-300">Universidade<br />de Brasília</span>
             </h1>
           </div>
           
-          {/* LINKS DE NAVEGAÇÃO */}
-          <div className="flex items-center gap-4 md:gap-6 text-white font-medium text-sm md:text-base">
-            <a href="#sobre" className="hover:text-[#e8474a] transition-colors pr-4 md:pr-6 border-r border-gray-700">Sobre</a>
-            <a href="#palestrantes" className="hover:text-[#e8474a] transition-colors pr-4 md:pr-6 border-r border-gray-700">Palestrantes</a>
-            <a href="#informacoes" className="hover:text-[#e8474a] transition-colors pr-4 md:pr-6 border-r border-gray-700">Informações</a>
+          {/* LINKS DE NAVEGAÇÃO (Ajustados para não cortar no celular) */}
+          <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 md:gap-6 text-white font-medium text-xs sm:text-sm md:text-base">
+            <a href="#sobre" className="hover:text-[#e8474a] transition-colors pr-2 sm:pr-4 md:pr-6 border-r border-gray-700">Sobre</a>
+            <a href="#palestrantes" className="hover:text-[#e8474a] transition-colors pr-2 sm:pr-4 md:pr-6 border-r border-gray-700">Palestrantes</a>
+            <a href="#informacoes" className="hover:text-[#e8474a] transition-colors pr-2 sm:pr-4 md:pr-6 border-r border-gray-700">Informações</a>
             <Link href="/ingressos" className="font-bold text-[#e8474a] hover:text-white transition-colors">
               Ingressos
             </Link>
           </div>
+
         </div>
       </nav>
 
       {/* SECÇÃO HERO (SOBRE) */}
-      <main id="sobre" className="w-full flex flex-col md:flex-row bg-[#a6a6a6] items-stretch">
-        
-        {/* Esquerda: Imagem Expandida */}
-        <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-0 overflow-hidden min-h-[45vh] md:min-h-[85vh]">
-          <img 
-            src="/mão-8.png" 
-            alt="Mãos segurando figura geométrica" 
-            className="w-full h-full object-cover object-center block" 
-          />
-        </div>
+<main id="sobre" className="w-full flex flex-col md:flex-row bg-[#b2b2b2] items-stretch border-b border-black">
+  
+  {/* Esquerda: Imagem Expandida */}
+  <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-0 overflow-hidden min-h-[45vh] md:min-h-[85vh]">
+    <img 
+      src="/mão-8.png" 
+      alt="Mãos segurando figura geométrica" 
+      className="w-full h-full object-cover object-center block" 
+    />
+  </div>
 
-        {/* Direita: Textos ajustados */}
-        {/* Adicionado um padding-top muito maior (md:pt-40 lg:pt-64) para empurrar o texto bem para baixo */}
-        <div className="w-full md:w-1/2 bg-[#a6a6a6] flex flex-col justify-start pt-10 pb-12 px-8 md:pt-40 lg:pt-64 md:px-12 lg:px-16">
-          
-          {/* Caixa de texto levemente mais larga (max-w-2xl) para garantir que o título caiba sem quebrar */}
-          <div className="w-full max-w-2xl 2xl:max-w-3xl">
-            
-            {/* Título Principal (Ajustado para text-5xl/4xl para caber em duas linhas) */}
-            <h2 className="text-4xl md:text-4xl font-normal leading-[1.1] tracking-tight mb-8 text-black">
-              <span className="font-black block text-black">Vários Futuros:</span>
-              <span className="block font-normal mt-1">Pluriverso de Narrativas Fundadoras</span>
-            </h2>
-            
-            {/* Bloco de Texto Contínuo */}
-            <p 
-              className="text-black text-[20px] lg:text-[20px] leading-[1.4] mb-10"
-              style={{ fontFamily: "'Inter', sans-serif" }}
-            >
-              Pensar sobre os futuros é um exercício constante do presente.<br />
-              Mas que futuros são esses que sonhamos construir?<br />
-              Das culturas ancestrais que firmam resistência aos espaços de produção dos saberes acadêmicos, propomos um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.
-            </p>
+  {/* Direita: Textos ajustados com o mesmo fundo cinza #b2b2b2 */}
+  <div className="w-full md:w-1/2 bg-[#b2b2b2] flex flex-col justify-start pt-10 pb-12 px-8 md:pt-40 lg:pt-64 md:px-12 lg:px-16">
+    <div className="w-full max-w-2xl 2xl:max-w-3xl">
+      
+      {/* Título Principal */}
+      <h2 className="text-4xl md:text-5xl font-normal leading-[1.1] tracking-tight mb-8 text-black">
+        <span className="font-black block text-black">Vários Futuros:</span>
+        <span className="block font-normal mt-1">Pluriverso de Narrativas Fundadoras</span>
+      </h2>
+      
+      {/* Bloco de Texto Contínuo */}
+      <p 
+        className="text-black font-semibold text-[20px] lg:text-[24px] leading-[1.4] mb-10"
+        style={{ fontFamily: "'Inter', sans-serif" }}
+      >
+        Pensar sobre os futuros é um exercício constante do presente.<br />
+        Mas que futuros são esses que sonhamos construir?<br />
+        Das culturas ancestrais que firmam resistência aos espaços de produção dos saberes acadêmicos, propomos um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.
+      </p>
 
-            {/* Nota da Licença TED */}
-            <p className="text-sm md:text-base lg:text-lg text-black font-normal mt-6">
-              Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
-            </p>
-            
-          </div>
-        </div>
-      </main>
+      {/* Nota da Licença TED */}
+      <p className="text-sm md:text-base lg:text-lg text-black font-normal mt-6">
+        Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
+      </p>
+      
+    </div>
+  </div>
+</main>
       
       {/* SECÇÃO PALESTRANTES */}
-      <section id="palestrantes" className="relative w-full bg-[#a6a6a6] pt-10 pb-16 flex-grow overflow-hidden">
-        <div className="w-full relative min-h-[40vh] md:min-h-[70vh] flex flex-col justify-center">
-          
-          {/* Título fixado na esquerda */}
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-black relative pl-[5%] mb-4 md:mb-0 md:absolute md:top-6 md:left-[5%] md:pl-0 z-20">
-            Palestrantes:
-          </h2>
+<section id="palestrantes" className="relative w-full bg-[#b2b2b2] pt-10 pb-16 flex-grow overflow-hidden border-b border-black">
+  <div className="w-full relative min-h-[40vh] md:min-h-[70vh] flex flex-col justify-center">
+    
+    {/* Título fixado na esquerda */}
+    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-black relative pl-[5%] mb-4 md:mb-0 md:absolute md:top-6 md:left-[5%] md:pl-0 z-20">
+      Palestrantes:
+    </h2>
 
-          {/* DESKTOP: Caminho centralizado perfeitamente no meio da tela */}
-          <div className="hidden md:flex justify-center w-full pt-16 lg:pt-4">
-            
-            {/* O 'mx-auto' centraliza este bloco. Se quiser diminuir o tamanho da imagem, diminua o max-w-[65vw] */}
-            <div className="path-wrapper w-full max-w-[65vw] lg:max-w-[57vw] mx-auto relative">
-              
-              {/* A imagem também leva 'mx-auto' para garantir o centro */}
-              <img src="/caminho-8.png" alt="Caminho colorido" className="w-full h-auto block mx-auto" />
-              
-              <img 
-                src="/prof-8.png" 
-                onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
-                className="absolute pos-prof cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Professora" 
-              />
-              
-              <img 
-                src="/meninos-8.png" 
-                onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
-                className="absolute pos-meninos cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Dupla" 
-              />
-              
-              <img 
-                src="/rubs-8.png" 
-                onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
-                className="absolute pos-rubs cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Rubens" 
-              />
-              
-              <img 
-                src="/ingrid-8.png" 
-                onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
-                className="absolute pos-ingrid cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Ingrid" 
-              />
-            </div>
-          </div>
+    {/* DESKTOP: Caminho centralizado */}
+    <div className="hidden md:flex justify-center w-full pt-16 lg:pt-4">
+      <div className="path-wrapper w-full max-w-[85vw] lg:max-w-[75vw] mx-auto relative">
+        <img src="/caminho-8.png" alt="Caminho colorido" className="w-full h-auto block mx-auto" />
+        
+        <img 
+          src="/prof-8.png" 
+          onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+          className="absolute pos-prof cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+          alt="Professora" 
+        />
+        
+        <img 
+          src="/meninos-8.png" 
+          onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+          className="absolute pos-meninos cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+          alt="Dupla" 
+        />
+        
+        <img 
+          src="/rubs-8.png" 
+          onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+          className="absolute pos-rubs cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+          alt="Rubens" 
+        />
+        
+        <img 
+          src="/ingrid-8.png" 
+          onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+          className="absolute pos-ingrid cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+          alt="Ingrid" 
+        />
+      </div>
+    </div>
 
-          {/* MOBILE: Grelha de fotos */}
-          <div className="grid grid-cols-2 gap-8 md:hidden place-items-center mt-6 px-[5%]">
-            <img 
-              src="/prof-8.png" 
-              onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
-              className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Professora" 
-            />
-            <img 
-              src="/meninos-8.png" 
-              onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
-              className="w-[50vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Dupla" 
-            />
-            <img 
-              src="/rubs-8.png" 
-              onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
-              className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Rubens" 
-            />
-            <img 
-              src="/ingrid-8.png" 
-              onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
-              className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Ingrid" 
-            />
-          </div>
-        </div>
-      </section>
+    {/* MOBILE: Grelha de fotos */}
+    <div className="grid grid-cols-2 gap-8 md:hidden place-items-center mt-6 px-[5%]">
+      <img 
+        src="/prof-8.png" 
+        onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+        className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
+        alt="Professora" 
+      />
+      <img 
+        src="/meninos-8.png" 
+        onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+        className="w-[50vw] cursor-pointer active:scale-95 transition-transform" 
+        alt="Dupla" 
+      />
+      <img 
+        src="/rubs-8.png" 
+        onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+        className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
+        alt="Rubens" 
+      />
+      <img 
+        src="/ingrid-8.png" 
+        onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+        className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
+        alt="Ingrid" 
+      />
+    </div>
+  </div>
+</section>
 
       {/* SECÇÃO INFORMAÇÕES */}
-      <section id="informacoes" className="w-full bg-[#b2b2b2] px-4 md:px-8 py-16">
+      <section id="informacoes" className="w-full bg-[#b2b2b2] px-4 md:px-8 py-16 border-b border-black">
         <div className="max-w-screen-2xl mx-auto">
           <h2 className="text-3xl lg:text-4xl font-normal mb-12 text-black">
             Informações:
@@ -224,33 +220,40 @@ export default function Home() {
         </div>
       </section>
       
-      {/* RODAPÉ COM LOGOS EM COLUNA */}
-      <footer className="w-full bg-black text-white py-12 px-6 md:px-12 border-t border-gray-800">
-        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 text-sm">
+      {/* RODAPÉ */}
+      <footer className="w-full bg-black text-white py-10 px-6 md:px-12 border-t border-black">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-sm">
           
-          <div className="flex flex-col items-center md:items-start gap-3">
+          {/* BLOCO 1: Realização (Empilhado: Latinoamerica em cima, UnB em baixo) */}
+          <div className="flex flex-col gap-3">
             <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
-            <div className="flex flex-col items-center md:items-start gap-4">
+            
+            <div className="flex flex-col items-start gap-2.5">
+              {/* Logo do Instituto Latinoamerica (maior) */}
               <img 
                 src="/logo-8.png" 
-                alt="Ministério da Cultura" 
-                className="h-10 md:h-12 w-auto object-contain" 
+                alt="Instituto Latinoamerica" 
+                className="h-15 md:h-25 w-auto object-contain" 
               />
+              
+              {/* Logo da UnB (ajustada para acompanhar harmonicamente) */}
               <img 
                 src="/unb-8.png" 
                 alt="Universidade de Brasília" 
-                className="h-6 md:h-7 w-auto object-contain" 
+                className="h-7 md:h-8 w-auto object-contain" 
               />
             </div>
           </div>
           
-          <div className="flex flex-col items-center text-center">
+          {/* BLOCO 2: Dúvidas / Suporte */}
+          <div className="flex flex-col items-start md:items-center text-left md:text-center">
             <span className="font-bold text-base text-white">Dúvidas | Suporte</span>
             <span className="text-base mt-1 text-gray-300">unb.tedx@gmail.com</span>
           </div>
           
-          <div className="text-center md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
-            Este evento TEDx é uma iniciativa independente,<br />realizada sob licença da TED.
+          {/* BLOCO 3: Nota da Licença TED */}
+          <div className="text-left md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
+            Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
           </div>
           
         </div>
