@@ -272,35 +272,38 @@ export default function IngressosPage() {
                 {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) - ALINHADAS PELO TOPO */}
                 <div style={{
                   position: 'absolute',
-                  top: '21%', /* Ajuste se precisar subir/descer as 3 juntas */
+                  top: '21%',
                   left: '0',
                   width: '100%',
                   display: 'flex',
-                  alignItems: 'flex-start', /* Trava o alinhamento de todas pelo topo */
+                  alignItems: 'flex-start', /* Mantém os títulos travados e alinhados no topo */
                   justifyContent: 'space-between', 
-                  padding: '0 8%', /* Dá a margem exata nas laterais */
+                  padding: '0 8%',
                   color: '#111',
                   boxSizing: 'border-box'
                 }}>
                   {/* COLUNA 1: DATA */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
-                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>19</div>
+                    {/* Alterado margin para '10px 0' para dar respiro igual em cima e embaixo */}
+                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>19</div>
                     <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
 
                   {/* COLUNA 2: HORÁRIO */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
-                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '2px 0' }}>14h</div>
+                    {/* Alterado margin para '10px 0' para acompanhar a data */}
+                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>14h</div>
                     <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
                   </div>
 
                   {/* COLUNA 3: LOCAL */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                    <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '3px' }}>Centro de<br />Excelência<br />em Turismo</div>
-                    <div style={{ fontSize: '0.58rem', marginTop: '3px', fontWeight: '500' }}>CET - UnB</div>
+                    {/* Aumentei levemente o marginTop para o texto acompanhar o respiro dos números */}
+                    <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '12px' }}>Centro de<br />Excelência<br />em Turismo</div>
+                    <div style={{ fontSize: '0.58rem', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
                 {/* NOME DO PARTICIPANTE DINÂMICO */}
