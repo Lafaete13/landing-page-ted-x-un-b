@@ -48,120 +48,120 @@ export default function Home() {
       </nav>
 
       {/* SECÇÃO HERO (SOBRE) */}
-<main id="sobre" className="w-full flex flex-col md:flex-row bg-[#b2b2b2] items-stretch border-b border-black">
-  
-  {/* Esquerda: Imagem Expandida */}
-  <div className="w-full md:w-1/2 bg-white flex items-center justify-center p-0 overflow-hidden min-h-[45vh] md:min-h-[85vh]">
-    <img 
-      src="/mão-8.png" 
-      alt="Mãos segurando figura geométrica" 
-      className="w-full h-full object-cover object-center block" 
-    />
-  </div>
+      <main id="sobre" className="w-full flex flex-col md:flex-row bg-[#b2b2b2] items-stretch border-b border-black">
+        
+      {/* Esquerda: Imagem com leve zoom para as mãos ultrapassarem as bordas */}
+        <div className="w-full md:w-1/2 bg-white relative overflow-hidden min-h-[35vh] md:min-h-[85vh]">
+          <img 
+            src="/mão-8.png" 
+            alt="Mãos segurando figura geométrica" 
+            className="absolute inset-0 w-full h-full object-cover object-[130%_center] scale-110 block" 
+          />
+        </div>
 
-  {/* Direita: Textos ajustados com o mesmo fundo cinza #b2b2b2 */}
-  <div className="w-full md:w-1/2 bg-[#b2b2b2] flex flex-col justify-start pt-10 pb-12 px-8 md:pt-40 lg:pt-64 md:px-12 lg:px-16">
-    <div className="w-full max-w-2xl 2xl:max-w-3xl">
-      
-      {/* Título Principal */}
-      <h2 className="text-4xl md:text-5xl font-normal leading-[1.1] tracking-tight mb-8 text-black">
-        <span className="font-black block text-black">Vários Futuros:</span>
-        <span className="block font-normal mt-1">Pluriverso de Narrativas Fundadoras</span>
-      </h2>
-      
-      {/* Bloco de Texto Contínuo */}
-      <p 
-        className="text-black font-semibold text-[20px] lg:text-[24px] leading-[1.4] mb-10"
-        style={{ fontFamily: "'Inter', sans-serif" }}
-      >
-        Pensar sobre os futuros é um exercício constante do presente.<br />
-        Mas que futuros são esses que sonhamos construir?<br />
-        Das culturas ancestrais que firmam resistência aos espaços de produção dos saberes acadêmicos, propomos um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.
-      </p>
+        {/* Direita: Textos ajustados com título em duas linhas */}
+        <div className="w-full md:w-1/2 bg-[#b2b2b2] flex flex-col justify-start pt-10 pb-12 px-8 md:pt-40 lg:pt-64 md:px-12 lg:px-16">
+          <div className="w-full max-w-3xl">
+            
+            {/* Título Principal (Forçado estritamente em DUAS linhas) */}
+            <h2 className="text-4xl md:text-3xl font-normal leading-[1] tracking-tight mb-8 text-black">
+              <span className="font-black block text-black">Vários Futuros:</span>
+              <span className="block font-normal mt-1">Pluriverso de Narrativas Fundadoras</span>
+            </h2>
+            
+            {/* Bloco de Texto Contínuo */}
+            <p 
+              className="text-black text-[20px] lg:text-[20px] leading-[1] mb-0"
+              style={{ fontFamily: "'Inter', sans-serif" }}
+            >
+              Pensar sobre os futuros é um exercício constante do presente.<br />
+              Mas que futuros são esses que sonhamos construir?<br />
+              Das culturas ancestrais que firmam resistência aos espaços de produção dos saberes acadêmicos, propomos um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.
+            </p>
 
-      {/* Nota da Licença TED */}
-      <p className="text-sm md:text-base lg:text-lg text-black font-normal mt-6">
-        Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
-      </p>
-      
-    </div>
-  </div>
-</main>
+            {/* Nota da Licença TED */}
+            <p className="text-sm md:text-base lg:text-lg text-black font-normal mt-6">
+              Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
+            </p>
+            
+          </div>
+        </div>
+      </main>
       
       {/* SECÇÃO PALESTRANTES */}
-<section id="palestrantes" className="relative w-full bg-[#b2b2b2] pt-10 pb-16 flex-grow overflow-hidden border-b border-black">
-  <div className="w-full relative min-h-[40vh] md:min-h-[70vh] flex flex-col justify-center">
-    
-    {/* Título fixado na esquerda */}
-    <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-black relative pl-[5%] mb-4 md:mb-0 md:absolute md:top-6 md:left-[5%] md:pl-0 z-20">
-      Palestrantes:
-    </h2>
+{/* SECÇÃO PALESTRANTES */}
+      <section id="palestrantes" className="relative w-full bg-[#b2b2b2] pt-8 pb-12 flex-grow overflow-hidden border-b border-black">
+        <div className="w-full relative min-h-[35vh] md:min-h-[55vh] flex flex-col justify-center">
+          
+          {/* Título fixado na esquerda */}
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-black relative pl-[5%] mb-2 md:mb-0 md:absolute md:top-4 md:left-[5%] md:pl-0 z-20">
+            Palestrantes:
+          </h2>
 
-    {/* DESKTOP: Caminho centralizado */}
-    <div className="hidden md:flex justify-center w-full pt-16 lg:pt-4">
-      <div className="path-wrapper w-full max-w-[85vw] lg:max-w-[75vw] mx-auto relative">
-        <img src="/caminho-8.png" alt="Caminho colorido" className="w-full h-auto block mx-auto" />
-        
-        <img 
-          src="/prof-8.png" 
-          onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
-          className="absolute pos-prof cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-          alt="Professora" 
-        />
-        
-        <img 
-          src="/meninos-8.png" 
-          onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
-          className="absolute pos-meninos cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-          alt="Dupla" 
-        />
-        
-        <img 
-          src="/rubs-8.png" 
-          onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
-          className="absolute pos-rubs cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-          alt="Rubens" 
-        />
-        
-        <img 
-          src="/ingrid-8.png" 
-          onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
-          className="absolute pos-ingrid cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-          alt="Ingrid" 
-        />
-      </div>
-    </div>
+          {/* DESKTOP: Caminho centralizado e reduzido */}
+          <div className="hidden md:flex justify-center w-full pt-12 lg:pt-2">
+            <div className="path-wrapper w-full max-w-[65vw] lg:max-w-[65vw] mx-auto relative">
+              <img src="/caminho-8.png" alt="Caminho colorido" className="w-full h-auto block mx-auto" />
+              
+              <img 
+                src="/prof-8.png" 
+                onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+                className="absolute pos-prof cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Professora" 
+              />
+              
+              <img 
+                src="/meninos-8.png" 
+                onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+                className="absolute pos-meninos cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Dupla" 
+              />
+              
+              <img 
+                src="/rubs-8.png" 
+                onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+                className="absolute pos-rubs cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Rubens" 
+              />
+              
+              <img 
+                src="/ingrid-8.png" 
+                onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+                className="absolute pos-ingrid cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Ingrid" 
+              />
+            </div>
+          </div>
 
-    {/* MOBILE: Grelha de fotos */}
-    <div className="grid grid-cols-2 gap-8 md:hidden place-items-center mt-6 px-[5%]">
-      <img 
-        src="/prof-8.png" 
-        onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
-        className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
-        alt="Professora" 
-      />
-      <img 
-        src="/meninos-8.png" 
-        onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
-        className="w-[50vw] cursor-pointer active:scale-95 transition-transform" 
-        alt="Dupla" 
-      />
-      <img 
-        src="/rubs-8.png" 
-        onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
-        className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
-        alt="Rubens" 
-      />
-      <img 
-        src="/ingrid-8.png" 
-        onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
-        className="w-[40vw] cursor-pointer active:scale-95 transition-transform" 
-        alt="Ingrid" 
-      />
-    </div>
-  </div>
-</section>
-
+          {/* MOBILE: Grelha de fotos */}
+          <div className="grid grid-cols-2 gap-6 md:hidden place-items-center mt-4 px-[5%]">
+            <img 
+              src="/prof-8.png" 
+              onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+              className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Professora" 
+            />
+            <img 
+              src="/meninos-8.png" 
+              onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+              className="w-[42vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Dupla" 
+            />
+            <img 
+              src="/rubs-8.png" 
+              onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+              className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Rubens" 
+            />
+            <img 
+              src="/ingrid-8.png" 
+              onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+              className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Ingrid" 
+            />
+          </div>
+        </div>
+      </section>
       {/* SECÇÃO INFORMAÇÕES */}
       <section id="informacoes" className="w-full bg-[#b2b2b2] px-4 md:px-8 py-16 border-b border-black">
         <div className="max-w-screen-2xl mx-auto">
@@ -233,14 +233,14 @@ export default function Home() {
               <img 
                 src="/logo-8.png" 
                 alt="Instituto Latinoamerica" 
-                className="h-15 md:h-25 w-auto object-contain" 
+                className="h-15 md:h-18 w-auto object-contain" 
               />
               
               {/* Logo da UnB (ajustada para acompanhar harmonicamente) */}
               <img 
                 src="/unb-8.png" 
                 alt="Universidade de Brasília" 
-                className="h-7 md:h-8 w-auto object-contain" 
+                className="h-7 md:h-6 w-auto object-contain" 
               />
             </div>
           </div>
