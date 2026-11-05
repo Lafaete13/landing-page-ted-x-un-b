@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { X } from 'lucide-react'
 
 interface Speaker {
   nome: string
@@ -34,7 +35,7 @@ export default function Home() {
             </h1>
           </div>
           
-          {/* LINKS DE NAVEGAÇÃO (Ajustados para não cortar no celular) */}
+          {/* LINKS DE NAVEGAÇÃO */}
           <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 md:gap-6 text-white font-medium text-xs sm:text-sm md:text-base">
             <a href="#sobre" className="hover:text-[#e8474a] transition-colors pr-2 sm:pr-4 md:pr-6 border-r border-gray-700">Sobre</a>
             <a href="#palestrantes" className="hover:text-[#e8474a] transition-colors pr-2 sm:pr-4 md:pr-6 border-r border-gray-700">Palestrantes</a>
@@ -53,17 +54,17 @@ export default function Home() {
       {/* Esquerda: Imagem deslocada para cima */}
         <div className="w-full md:w-1/2 bg-white relative overflow-hidden min-h-[35vh] md:min-h-[85vh]">
           <img 
-            src="/mão-8.png" 
+            src="/mao-8.png" 
             alt="Mãos segurando figura geométrica" 
-            className="absolute inset-0 w-full h-full object-cover object-[130%_40%] scale-110 block" 
+            className="absolute inset-0 w-full h-full object-cover object-[100%_0%] scale-110 block" 
           />
         </div>
 
-        {/* Direita: Textos ajustados com título em duas linhas */}
+        {/* Direita: Textos ajustados */}
         <div className="w-full md:w-1/2 bg-[#b2b2b2] flex flex-col justify-start pt-10 pb-12 px-8 md:pt-40 lg:pt-64 md:px-12 lg:px-16">
           <div className="w-full max-w-3xl">
             
-            {/* Título Principal (Forçado estritamente em DUAS linhas) */}
+            {/* Título Principal */}
             <h2 className="text-4xl md:text-3xl font-normal leading-[1] tracking-tight mb-8 text-black">
               <span className="font-black block text-black">Vários Futuros:</span>
               <span className="block font-normal mt-1">Pluriverso de Narrativas Fundadoras</span>
@@ -241,6 +242,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+
       {/* SECÇÃO INFORMAÇÕES */}
       <section id="informacoes" className="w-full bg-[#b2b2b2] px-4 md:px-8 py-16 border-b border-black">
         <div className="max-w-screen-2xl mx-auto">
@@ -348,29 +350,47 @@ export default function Home() {
       {/* MODAL DE MINI-BIO */}
       {activeSpeaker && (
         <div 
-          className="fixed inset-0 bg-black/70 z-50 flex flex-col items-center justify-center p-6 backdrop-blur-sm transition-opacity duration-300"
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
           onClick={closeBio}
         >
           <div 
-            className="bg-[#e5e5e5] rounded-xl p-8 w-[90%] max-w-sm relative shadow-2xl text-black border border-black/10"
+            className="bg-[#ececec] text-black rounded-2xl p-6 md:p-8 max-w-lg w-full relative max-h-[85vh] flex flex-col overflow-hidden shadow-2xl border border-black/10"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Botão Fechar */}
             <button 
-              onClick={closeBio} 
-              className="absolute top-4 right-5 text-black/50 hover:text-[#e8474a] text-3xl transition-colors font-light"
+              onClick={closeBio}
+              className="absolute top-4 right-4 text-black/60 hover:text-black p-1 rounded-full hover:bg-black/5 transition-colors z-20"
+              aria-label="Fechar biografia"
             >
-              &times;
+              <X size={22} />
             </button>
-            
-            <div className="flex flex-col items-center text-center mt-2">
-              <img 
-                src={activeSpeaker.imagemSrc} 
-                alt={activeSpeaker.nome} 
-                className="w-32 h-auto mb-5 drop-shadow-md rounded-full" 
-              />
-              <h3 className="text-2xl font-black tracking-tight mb-2">{activeSpeaker.nome}</h3>
-              <p className="text-black/70 leading-relaxed text-sm">{activeSpeaker.descricao}</p>
+
+            {/* Conteúdo com rolagem se a tela for muito pequena */}
+            <div className="overflow-y-auto pr-1 flex flex-col items-center text-center custom-scrollbar">
+              
+              {/* Foto do Palestrante */}
+              {activeSpeaker.imagemSrc && (
+                <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden mb-4 shrink-0 shadow-md border-2 border-white">
+                  <img 
+                    src={activeSpeaker.imagemSrc} 
+                    alt={activeSpeaker.nome} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+              )}
+
+              {/* Nome */}
+              <h3 className="text-xl md:text-2xl font-black mb-3 tracking-tight text-black shrink-0">
+                {activeSpeaker.nome}
+              </h3>
+
+              {/* Bio ajustada */}
+              <p className="text-[13px] md:text-[15px] leading-snug md:leading-relaxed text-black/80 font-normal whitespace-pre-line">
+                {activeSpeaker.descricao}
+              </p>
             </div>
+
           </div>
         </div>
       )}
