@@ -50,12 +50,12 @@ export default function Home() {
       {/* SECÇÃO HERO (SOBRE) */}
       <main id="sobre" className="w-full flex flex-col md:flex-row bg-[#b2b2b2] items-stretch border-b border-black">
         
-      {/* Esquerda: Imagem com leve zoom para as mãos ultrapassarem as bordas */}
+      {/* Esquerda: Imagem deslocada para cima */}
         <div className="w-full md:w-1/2 bg-white relative overflow-hidden min-h-[35vh] md:min-h-[85vh]">
           <img 
             src="/mão-8.png" 
             alt="Mãos segurando figura geométrica" 
-            className="absolute inset-0 w-full h-full object-cover object-[130%_center] scale-110 block" 
+            className="absolute inset-0 w-full h-full object-cover object-[130%_40%] scale-110 block" 
           />
         </div>
 
@@ -89,46 +89,89 @@ export default function Home() {
       </main>
       
       {/* SECÇÃO PALESTRANTES */}
-{/* SECÇÃO PALESTRANTES */}
       <section id="palestrantes" className="relative w-full bg-[#b2b2b2] pt-8 pb-12 flex-grow overflow-hidden border-b border-black">
         <div className="w-full relative min-h-[35vh] md:min-h-[55vh] flex flex-col justify-center">
           
-          {/* Título fixado na esquerda com tamanho reduzido */}
+          {/* Título fixado na esquerda */}
           <h2 className="text-[15px] md:text-[30px] font-black tracking-tight text-black relative pl-[5%] mb-2 md:mb-0 md:absolute md:top-4 md:left-[5%] md:pl-0 z-20">
             Palestrantes:
           </h2>
 
-          {/* DESKTOP: Caminho centralizado e reduzido */}
+          {/* DESKTOP: Caminho centralizado */}
           <div className="hidden md:flex justify-center w-full pt-12 lg:pt-2">
             <div className="path-wrapper w-full max-w-[65vw] lg:max-w-[65vw] mx-auto relative">
               <img src="/caminho-8.png" alt="Caminho colorido" className="w-full h-auto block mx-auto" />
               
+              {/* LILÁS: Djaine Damiati */}
               <img 
                 src="/prof-8.png" 
-                onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+                onClick={() => openBio(
+                  'Djaine Damiati', 
+                  'Doutora em Ciências Sociais e Mestre em Comunicação Midiática pela UNESP, com estágio de doutorado no Instituto de Ciências Sociais (ICS) da Universidade de Lisboa. Realizou estágio de pós-doutorado na Faculdade de Educação (FE - UnB) com pesquisa na área de políticas públicas em educação aberta e tecnologias para o bem comum. Atualmente é pesquisadora da Cátedra UNESCO em Educação Aberta e Tecnologias para o Bem Comum (UnB), onde atua no projeto Limiar - Laboratório de Futuros. É professora na Universidade IDP (Brasília) e professora substituta na Faculdade de Comunicação (FAC - UnB).', 
+                  '/prof-8.png'
+                )} 
                 className="absolute pos-prof cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Professora" 
+                alt="Djaine Damiati" 
               />
               
+              {/* MARROM: Pompeu & Gas Oliveira */}
               <img 
                 src="/meninos-8.png" 
-                onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+                onClick={() => openBio(
+                  'Pompeu & Gas Oliveira', 
+                  'Comunicólogos pela UnB e criadores de conteúdo. Atuam na pesquisa e documentação de linguagens e culturas. São fundadores do BlaBlaLab, um laboratório que descomplica a ciência da comunicação por meio do audiovisual. Seus conteúdos já impactaram milhões de pessoas e foram compartilhados em diversos colégios e universidades.', 
+                  '/meninos-8.png'
+                )} 
                 className="absolute pos-meninos cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Dupla" 
+                alt="Pompeu & Gas Oliveira" 
               />
               
+              {/* VERDE: Rubenilson Cerqueira */}
               <img 
                 src="/rubs-8.png" 
-                onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+                onClick={() => openBio(
+                  'Rubenilson Cerqueira', 
+                  'Doutor em Educação pela UnB, internacionalista, pesquisador e educador. Cursou toda a educação básica na rede pública e defende a democratização educacional superior. Em 2015, co-fundou com três amigos da UnB o Galt Vestibulares, cursinho popular que já impactou mais de 3.800 estudantes e mobiliza cerca de 140 voluntários atualmente. Possui trajetória como professor universitário e formador, atuou como consultor de políticas educacionais na UNESCO/MEC (2025–2026). Alumnus de Brasília sem Fronteiras e YLAI, ambos nos EUA, une pesquisa e transformação social para ampliar o acesso à educação superior gratuita, democrática e de qualidade e permitir que jovens protagonizem futuros historicamente negados.', 
+                  '/rubs-8.png'
+                )} 
                 className="absolute pos-rubs cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Rubens" 
+                alt="Rubenilson Cerqueira" 
               />
               
+              {/* ROSA: Ingrid Garritano */}
               <img 
                 src="/ingrid-8.png" 
-                onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+                onClick={() => openBio(
+                  'Ingrid Garritano', 
+                  'Ingrid Garritano é professora formada pela Universidade de Brasília (UnB) e pós-graduada em Gestão de Projetos em Sydney, na Austrália. É fundadora da Quartzo Organiza, onde atua com educação em gestão do tempo e estratégias de organização da rotina. Seu trabalho envolve o desenvolvimento de uma metodologia própria de produtividade, com aplicação de conceitos da neurociência. Ao longo de sua trajetória, já acompanhou mais de 600 alunas em 10 países.', 
+                  '/ingrid-8.png'
+                )} 
                 className="absolute pos-ingrid cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
-                alt="Ingrid" 
+                alt="Ingrid Garritano" 
+              />
+
+              {/* VERMELHO: Rapha Baggas */}
+              <img 
+                src="/Rapha-8.png" 
+                onClick={() => openBio(
+                  'Rapha Baggas', 
+                  'Rapha Baggas é designer, diretor de arte e ilustrador. Sua prática é fundamentada em uma forte trajetória acadêmica: formado em Design pela UFBA, com extensão na Universidade de Aveiro (Portugal) e mestrado em Tecnopolítica no Design pela UnB.\n\nCentradas na crítica social, as criações de Baggas utilizam recursos semióticos para sintetizar, de forma ácida e vibrante, as questões mais urgentes do nosso tempo. Sua presença nas redes sociais é marcada por crônicas visuais ágeis aos acontecimentos diários. Isso estabelece um diálogo ativo com o público: o espectador não é passivo, mas instigado a investigar e relembrar fatos para interpretar suas imagens. Dessa forma, seu trabalho pictográfico se consolida como uma expressão potente e atual de resistência política e cultural.', 
+                  '/Rapha-8.png'
+                )} 
+                className="absolute pos-rapha cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Rapha Baggas" 
+              />
+
+              {/* AMARELO: Damaris Chamorro */}
+              <img 
+                src="/Damaris-8.png" 
+                onClick={() => openBio(
+                  'Damaris Chamorro', 
+                  'Mulher andina. Artista migrante, agente cultural e pesquisadora. Doutoranda em Direitos Humanos e Cidadania (UnB), mestre em Psicologia Clínica e Cultura (UnB, 2022) e psicóloga (Peru, 2011). Pesquisa mulheres migrantes hispanofalantes em espaços físicos e virtuais. Trabalha com palhaçaria hospitalar desde 2010 e atualmente integra coletivos de palhaços em Brasília.', 
+                  '/Damaris-8.png'
+                )} 
+                className="absolute pos-damaris cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl z-10" 
+                alt="Damaris Chamorro" 
               />
             </div>
           </div>
@@ -137,27 +180,63 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-6 md:hidden place-items-center mt-4 px-[5%]">
             <img 
               src="/prof-8.png" 
-              onClick={() => openBio('Professora', 'Doutora em narrativas pluriversas e ancestralidade.', '/prof-8.png')} 
+              onClick={() => openBio(
+                'Djaine Damiati', 
+                'Doutora em Ciências Sociais e Mestre em Comunicação Midiática pela UNESP, com estágio de doutorado no Instituto de Ciências Sociais (ICS) da Universidade de Lisboa. Realizou estágio de pós-doutorado na Faculdade de Educação (FE - UnB) com pesquisa na área de políticas públicas em educação aberta e tecnologias para o bem comum. Atualmente é pesquisadora da Cátedra UNESCO em Educação Aberta e Tecnologias para o Bem Comum (UnB), onde atua no projeto Limiar - Laboratório de Futuros. É professora na Universidade IDP (Brasília) e professora substituta na Faculdade de Comunicação (FAC - UnB).', 
+                '/prof-8.png'
+              )} 
               className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Professora" 
+              alt="Djaine Damiati" 
             />
             <img 
               src="/meninos-8.png" 
-              onClick={() => openBio('Os Meninos', 'Criadores de projetos de impacto social.', '/meninos-8.png')} 
+              onClick={() => openBio(
+                'Pompeu & Gas Oliveira', 
+                'Comunicólogos pela UnB e criadores de conteúdo. Atuam na pesquisa e documentação de linguagens e culturas. São fundadores do BlaBlaLab, um laboratório que descomplica a ciência da comunicação por meio do audiovisual. Seus conteúdos já impactaram milhões de pessoas e foram compartilhados em diversos colégios e universidades.', 
+                '/meninos-8.png'
+              )} 
               className="w-[42vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Dupla" 
+              alt="Pompeu & Gas Oliveira" 
             />
             <img 
               src="/rubs-8.png" 
-              onClick={() => openBio('Rubens', 'Especialista em inovação e arquitetura de futuros.', '/rubs-8.png')} 
+              onClick={() => openBio(
+                'Rubenilson Cerqueira', 
+                'Doutor em Educação pela UnB, internacionalista, pesquisador e educador. Cursou toda a educação básica na rede pública e defende a democratização educacional superior. Em 2015, co-fundou com três amigos da UnB o Galt Vestibulares, cursinho popular que já impactou mais de 3.800 estudantes e mobiliza cerca de 140 voluntários atualmente. Possui trajetória como professor universitário e formador, atuou como consultor de políticas educacionais na UNESCO/MEC (2025–2026). Alumnus de Brasília sem Fronteiras e YLAI, ambos nos EUA, une pesquisa e transformação social para ampliar o acesso à educação superior gratuita, democrática e de qualidade e permitir que jovens protagonizem futuros historicamente negados.', 
+                '/rubs-8.png'
+              )} 
               className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Rubens" 
+              alt="Rubenilson Cerqueira" 
             />
             <img 
               src="/ingrid-8.png" 
-              onClick={() => openBio('Ingrid', 'Pesquisadora focada em ecossistemas digitais.', '/ingrid-8.png')} 
+              onClick={() => openBio(
+                'Ingrid Garritano', 
+                'Ingrid Garritano é professora formada pela Universidade de Brasília (UnB) e pós-graduada em Gestão de Projetos em Sydney, na Austrália. É fundadora da Quartzo Organiza, onde atua com educação em gestão do tempo e estratégias de organização da rotina. Seu trabalho envolve o desenvolvimento de uma metodologia própria de produtividade, com aplicação de conceitos da neurociência. Ao longo de sua trajetória, já acompanhou mais de 600 alunas em 10 países.', 
+                '/ingrid-8.png'
+              )} 
               className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
-              alt="Ingrid" 
+              alt="Ingrid Garritano" 
+            />
+            <img 
+              src="/Rapha-8.png" 
+              onClick={() => openBio(
+                'Rapha Baggas', 
+                'Rapha Baggas é designer, diretor de arte e ilustrador. Sua prática é fundamentada em uma forte trajetória acadêmica: formado em Design pela UFBA, com extensão na Universidade de Aveiro (Portugal) e mestrado em Tecnopolítica no Design pela UnB.\n\nCentradas na crítica social, as criações de Baggas utilizam recursos semióticos para sintetizar, de forma ácida e vibrante, as questões mais urgentes do nosso tempo. Sua presença nas redes sociais é marcada por crônicas visuais ágeis aos acontecimentos diários. Isso estabelece um diálogo ativo com o público: o espectador não é passivo, mas instigado a investigar e relembrar fatos para interpretar suas imagens. Dessa forma, seu trabalho pictográfico se consolida como uma expressão potente e atual de resistência política e cultural.', 
+                '/Rapha-8.png'
+              )} 
+              className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Rapha Baggas" 
+            />
+            <img 
+              src="/Damaris-8.png" 
+              onClick={() => openBio(
+                'Damaris Chamorro', 
+                'Mulher andina. Artista migrante, agente cultural e pesquisadora. Doutoranda em Direitos Humanos e Cidadania (UnB), mestre em Psicologia Clínica e Cultura (UnB, 2022) e psicóloga (Peru, 2011). Pesquisa mulheres migrantes hispanofalantes em espaços físicos e virtuais. Trabalha com palhaçaria hospitalar desde 2010 e atualmente integra coletivos de palhaços em Brasília.', 
+                '/Damaris-8.png'
+              )} 
+              className="w-[35vw] cursor-pointer active:scale-95 transition-transform" 
+              alt="Damaris Chamorro" 
             />
           </div>
         </div>
@@ -224,31 +303,38 @@ export default function Home() {
       <footer className="w-full bg-black text-white py-10 px-6 md:px-12 border-t border-black">
         <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-sm">
           
-          {/* BLOCO 1: Realização (Empilhado: Latinoamerica em cima, UnB em baixo) */}
+          {/* BLOCO 1: Realização */}
           <div className="flex flex-col gap-3">
             <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
             
-            <div className="flex flex-col items-start gap-2.5">
-              {/* Logo do Instituto Latinoamerica (maior) */}
+            <div className="flex items-start">
+              {/* Imagem única com todas as marcas integradas */}
               <img 
                 src="/logo-8.png" 
-                alt="Instituto Latinoamerica" 
-                className="h-15 md:h-18 w-auto object-contain" 
-              />
-              
-              {/* Logo da UnB (ajustada para acompanhar harmonicamente) */}
-              <img 
-                src="/unb-8.png" 
-                alt="Universidade de Brasília" 
-                className="h-7 md:h-6 w-auto object-contain" 
+                alt="Realização: Instituto Latinoamerica, Ministério da Cultura e Universidade de Brasília" 
+                className="h-12 md:h-25 w-auto object-contain" 
               />
             </div>
           </div>
           
-          {/* BLOCO 2: Dúvidas / Suporte */}
+          {/* BLOCO 2: Instagram + Dúvidas / Suporte */}
           <div className="flex flex-col items-start md:items-center text-left md:text-center">
+            <a 
+              href="https://www.instagram.com/unb.tedx?psln=MWsxcmh2aW51NHdoNA==" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="mb-2 hover:opacity-80 transition-opacity"
+              aria-label="Instagram TEDx UnB"
+            >
+              <img 
+                src="/IG-8.png" 
+                alt="Instagram" 
+                className="h-7 w-7 object-contain" 
+              />
+            </a>
+
             <span className="font-bold text-base text-white">Dúvidas | Suporte</span>
-            <span className="text-base mt-1 text-gray-300">unb.tedx@gmail.com</span>
+            <span className="text-base mt-0.5 text-gray-300">unb.tedx@gmail.com</span>
           </div>
           
           {/* BLOCO 3: Nota da Licença TED */}
