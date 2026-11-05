@@ -369,13 +369,13 @@ export default function Home() {
             {/* Conteúdo com rolagem se a tela for muito pequena */}
             <div className="overflow-y-auto pr-1 flex flex-col items-center text-center custom-scrollbar">
               
-              {/* Foto do Palestrante */}
+              {/* Foto do Palestrante sem corte redondo e sem borda */}
               {activeSpeaker.imagemSrc && (
-                <div className="w-24 h-24 md:w-28 md:h-28 rounded-full overflow-hidden mb-4 shrink-0 shadow-md border-2 border-white">
+                <div className="w-24 md:w-28 mb-4 shrink-0">
                   <img 
                     src={activeSpeaker.imagemSrc} 
                     alt={activeSpeaker.nome} 
-                    className="w-full h-full object-cover" 
+                    className="w-full h-auto object-contain block" 
                   />
                 </div>
               )}
