@@ -21,6 +21,17 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.get("/api/ingressos/total")
+def obter_total_ingressos(db: Session = Depends(get_db)):
+    # Se você estiver salvando em uma lista em memória ou banco, calcule o total aqui.
+    # Exemplo com lista em memória: total = len(lista_de_ingressos)
+    # Exemplo com banco SQL (SQLAlchemy): total = db.query(IngressoModel).count()
+    
+    # Substitua 'total_registros' pela variável real do seu banco/lista:
+    total_registros = len(db.exec(select(Ingresso)).all())
+    
+    return {"total": total_registros}
+
 @app.on_event("startup")
 def on_startup():
     SQLModel.metadata.create_all(engine)

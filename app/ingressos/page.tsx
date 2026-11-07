@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
@@ -41,7 +41,24 @@ export default function IngressosPage() {
   const [emailError, setEmailError] = useState('')
   const [qrCodeUrl, setQrCodeUrl] = useState('')
   const [loading, setLoading] = useState(false)
+  const [totalIngressos, setTotalIngressos] = useState<number>(0)
   const ticketRef = useRef<HTMLDivElement>(null)
+
+  // Busca a contagem de ingressos emitidos ao carregar a página
+  useEffect(() => {
+  async function carregarContagem() {
+    try {
+      const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos/total')
+      const data = await res.json()
+      if (res.ok && data.total !== undefined) {
+        setTotalIngressos(data.total)
+      }
+    } catch (err) {
+      console.error("Erro ao buscar total de ingressos", err)
+    }
+  }
+  carregarContagem()
+}, [])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -88,42 +105,42 @@ export default function IngressosPage() {
       setSubmitted(true)
 
       // 3. Aguarda a tela desenhar o ingresso
-    setTimeout(async () => {
-      if (!ticketRef.current) return;
+      setTimeout(async () => {
+        if (!ticketRef.current) return;
 
-      try {
-        const canvas = await html2canvas(ticketRef.current, {
-          backgroundColor: '#ffffff',
-          scale: 2,
-          useCORS: true,
-          logging: false,
-        });
+        try {
+          const canvas = await html2canvas(ticketRef.current, {
+            backgroundColor: '#ffffff',
+            scale: 2,
+            useCORS: true,
+            logging: false,
+          });
 
-        const arquivoBase64 = canvas.toDataURL('image/png', 0.9);
-        console.log("Canvas gerado com sucesso, disparando e-mail...");
+          const arquivoBase64 = canvas.toDataURL('image/png', 0.9);
+          console.log("Canvas gerado com sucesso, disparando e-mail...");
 
-        const emailRes = await fetch('/api/enviar-ingresso', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            nome: payload.nome_completo,
-            emailDestino: payload.email,
-            arquivoBase64: arquivoBase64
-          })
-        });
+          const emailRes = await fetch('/api/enviar-ingresso', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nome: payload.nome_completo,
+              emailDestino: payload.email,
+              arquivoBase64: arquivoBase64
+            })
+          });
 
-        const emailData = await emailRes.json();
-        
-        if (!emailRes.ok) {
-          console.error("Erro retornado pela API de e-mail:", emailData);
-        } else {
-          console.log("E-mail disparado com sucesso!", emailData);
+          const emailData = await emailRes.json();
+          
+          if (!emailRes.ok) {
+            console.error("Erro retornado pela API de e-mail:", emailData);
+          } else {
+            console.log("E-mail disparado com sucesso!", emailData);
+          }
+
+        } catch (err) {
+          console.error("Erro interno no processo de captura/envio:", err);
         }
-
-      } catch (err) {
-        console.error("Erro interno no processo de captura/envio:", err);
-      }
-    }, 500); // 500 milissegundos é tempo suficiente para o React renderizar a div antes do html2canvas agir
+      }, 500);
 
     } catch (error) {
       alert('Não foi possível conectar ao servidor. Verifique se a API está rodando.')
@@ -210,6 +227,9 @@ export default function IngressosPage() {
                 <div>
                   <p className="card-kicker" style={{ color: '#e8474a' }}>A entrada é gratuita</p>
                   <h2>Garanta seu ingresso</h2>
+                  <p style={{ fontSize: '0.85rem', color: '#444', marginTop: '4px', fontWeight: '500' }}>
+                    🔥 <strong>{totalIngressos}</strong> ingressos já emitidos!
+                  </p>
                 </div>
               </div>
               <p className="card-intro">Preencha seus dados para viver essa conversa sobre futuros.</p>
@@ -285,7 +305,7 @@ export default function IngressosPage() {
               <div className="success-check" style={{ backgroundColor: '#e8474a' }}><Check size={23} /></div>
               <p className="card-kicker" style={{ color: '#e8474a' }}>Ingresso confirmado</p>
               <h2>Nos vemos no TEDx!</h2>
-              <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento.</p>
+              <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento e verifique sua caixa de spam caso não encontre o e-mail.</p>
               
               {/* MODELO DO INGRESSO RENDERIZADO */}
               <div
@@ -303,21 +323,21 @@ export default function IngressosPage() {
                   overflow: 'hidden', 
                 }}
               >
-                {/* Template Imagem de Fundo (Com logo, título e "Ingresso de:" já fixos) */}
+                {/* Template Imagem de Fundo */}
                 <img
                   src="/ingresso-template.png"
                   alt="Template Ingresso TEDx"
                   style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
 
-                {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) - ALINHADAS PELO TOPO */}
+                {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) */}
                 <div style={{
                   position: 'absolute',
                   top: '21%',
                   left: '0',
                   width: '100%',
                   display: 'flex',
-                  alignItems: 'flex-start', /* Mantém os títulos travados e alinhados no topo */
+                  alignItems: 'flex-start',
                   justifyContent: 'space-between', 
                   padding: '0 8%',
                   color: '#111',
@@ -326,7 +346,6 @@ export default function IngressosPage() {
                   {/* COLUNA 1: DATA */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
-                    {/* Alterado margin para '10px 0' para dar respiro igual em cima e embaixo */}
                     <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>19</div>
                     <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
@@ -334,7 +353,6 @@ export default function IngressosPage() {
                   {/* COLUNA 2: HORÁRIO */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
-                    {/* Alterado margin para '10px 0' para acompanhar a data */}
                     <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>14h</div>
                     <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
                   </div>
@@ -342,22 +360,22 @@ export default function IngressosPage() {
                   {/* COLUNA 3: LOCAL */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                    {/* Aumentei levemente o marginTop para o texto acompanhar o respiro dos números */}
                     <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '12px' }}>Centro de<br />Excelência<br />em Turismo</div>
                     <div style={{ fontSize: '0.58rem', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
+
                 {/* NOME DO PARTICIPANTE DINÂMICO */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '41.5%', /* Subimos o valor para compensar a queda na hora de baixar */
+                    top: '41.5%',
                     left: '26%',  
                     width: '68%',
                     textAlign: 'left',
                     color: '#111',
                     whiteSpace: 'nowrap',
-                    lineHeight: '1', /* Travado em 1 para o html2canvas não adicionar margem fantasma */
+                    lineHeight: '1',
                     overflow: 'visible',
                     margin: 0,
                     padding: 0,
@@ -424,7 +442,6 @@ export default function IngressosPage() {
       <footer className="w-full bg-white text-black py-8 px-6 md:px-12 border-t border-gray-300">
         <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           
-          {/* BLOCO 1: Logos (UnB, Realização, Fomento) */}
           <div className="flex-1 flex justify-center md:justify-start w-full">
             <img 
               src="/Ativo 23-8.png" 
@@ -433,9 +450,7 @@ export default function IngressosPage() {
             />
           </div>
           
-          {/* BLOCO 2: Contato e Licença */}
           <div className="flex flex-col items-center text-center shrink-0">
-            {/* Ícone do Instagram (com 'invert' para ficar preto no fundo branco) */}
             <a 
               href="https://www.instagram.com/unb.tedx?psln=MWsxcmh2aW51NHdoNA==" 
               target="_blank" 
