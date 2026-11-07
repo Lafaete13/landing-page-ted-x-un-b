@@ -104,6 +104,9 @@ export default function IngressosPage() {
       setAttendeeName(payload.nome_completo)
       setSubmitted(true)
 
+      // ADICIONE ESTA LINHA AQUI PARA ATUALIZAR O CONTADOR NA HORA:
+      setTotalIngressos((prev) => prev + 1)
+
       // 3. Aguarda a tela desenhar o ingresso
       setTimeout(async () => {
         if (!ticketRef.current) return;
@@ -227,8 +230,8 @@ export default function IngressosPage() {
                 <div>
                   <p className="card-kicker" style={{ color: '#e8474a' }}>A entrada é gratuita</p>
                   <h2>Garanta seu ingresso</h2>
-                  <p style={{ fontSize: '0.85rem', color: '#444', marginTop: '4px', fontWeight: '500' }}>
-                    🔥 <strong>{totalIngressos}</strong> ingressos já emitidos!
+                  <p style={{ fontSize: '0.9rem', color: '#f3f4f6', marginTop: '6px', fontWeight: '600', letterSpacing: '0.3px' }}>
+                    🔥 <strong style={{ color: '#e8474a', fontSize: '1rem' }}>{totalIngressos}</strong> ingressos já emitidos!
                   </p>
                 </div>
               </div>
