@@ -87,37 +87,43 @@ export default function IngressosPage() {
       setAttendeeName(payload.nome_completo)
       setSubmitted(true)
 
-      // 3. Aguarda a tela desenhar o ingresso (setTimeout pequeno) para podermos capturá-lo
-      setTimeout(async () => {
-        if (!ticketRef.current) return;
+      // 3. Aguarda a tela desenhar o ingresso
+    setTimeout(async () => {
+      if (!ticketRef.current) return;
 
-        // Captura o ingresso como PNG em segundo plano
+      try {
         const canvas = await html2canvas(ticketRef.current, {
           backgroundColor: '#ffffff',
-          scale: 2, // Uma escala levemente menor para o arquivo de e-mail não ficar pesado demais
+          scale: 2,
           useCORS: true,
           logging: false,
         });
 
         const arquivoBase64 = canvas.toDataURL('image/png', 0.9);
+        console.log("Canvas gerado com sucesso, disparando e-mail...");
 
-        // Dispara o e-mail pela sua nova rota
-        try {
-          await fetch('/api/enviar-ingresso', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              nome: payload.nome_completo,
-              emailDestino: payload.email,
-              arquivoBase64: arquivoBase64
-            })
-          });
-          // Se quiser, você pode colocar um console.log aqui para saber que enviou:
-          // console.log("E-mail de ingresso enviado com sucesso!");
-        } catch (emailError) {
-          console.error("Erro ao disparar a rota de e-mail:", emailError);
+        const emailRes = await fetch('/api/enviar-ingresso', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nome: payload.nome_completo,
+            emailDestino: payload.email,
+            arquivoBase64: arquivoBase64
+          })
+        });
+
+        const emailData = await emailRes.json();
+        
+        if (!emailRes.ok) {
+          console.error("Erro retornado pela API de e-mail:", emailData);
+        } else {
+          console.log("E-mail disparado com sucesso!", emailData);
         }
-      }, 500); // 500 milissegundos é tempo suficiente para o React renderizar a div antes do html2canvas agir
+
+      } catch (err) {
+        console.error("Erro interno no processo de captura/envio:", err);
+      }
+    }, 500); // 500 milissegundos é tempo suficiente para o React renderizar a div antes do html2canvas agir
 
     } catch (error) {
       alert('Não foi possível conectar ao servidor. Verifique se a API está rodando.')
