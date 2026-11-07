@@ -303,46 +303,41 @@ export default function Home() {
       </section>
       
       {/* RODAPÉ */}
-      <footer className="w-full bg-black text-white py-10 px-6 md:px-12 border-t border-black">
-        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-sm">
+      <footer className="w-full bg-white text-black py-8 px-6 md:px-12 border-t border-gray-300">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           
-          {/* BLOCO 1: Realização */}
-          <div className="flex flex-col gap-3">
-            <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
-            
-            <div className="flex items-start">
-              {/* Imagem única com todas as marcas integradas */}
-              <img 
-                src="/logo-8.png" 
-                alt="Realização: Instituto Latinoamerica, Ministério da Cultura e Universidade de Brasília" 
-                className="h-12 md:h-25 w-auto object-contain" 
-              />
-            </div>
+          {/* BLOCO 1: Logos (UnB, Realização, Fomento) */}
+          <div className="flex-1 flex justify-center md:justify-start w-full">
+            <img 
+              src="/Ativo 23-8.png" 
+              alt="Marcas Realização e Fomento" 
+              className="w-full max-w-3xl h-auto object-contain" 
+            />
           </div>
           
-          {/* BLOCO 2: Instagram + Dúvidas / Suporte */}
-          <div className="flex flex-col items-start md:items-center text-left md:text-center">
+          {/* BLOCO 2: Contato e Licença */}
+          <div className="flex flex-col items-center text-center shrink-0">
+            {/* Ícone do Instagram (com 'invert' para ficar preto no fundo branco) */}
             <a 
               href="https://www.instagram.com/unb.tedx?psln=MWsxcmh2aW51NHdoNA==" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="mb-2 hover:opacity-80 transition-opacity"
+              className="mb-1 hover:opacity-70 transition-opacity"
               aria-label="Instagram TEDx UnB"
             >
               <img 
                 src="/IG-8.png" 
                 alt="Instagram" 
-                className="h-7 w-7 object-contain" 
+                className="h-8 w-8 object-contain invert" 
               />
             </a>
 
-            <span className="font-bold text-base text-white">Dúvidas | Suporte</span>
-            <span className="text-base mt-0.5 text-gray-300">unb.tedx@gmail.com</span>
-          </div>
-          
-          {/* BLOCO 3: Nota da Licença TED */}
-          <div className="text-left md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
-            Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
+            <span className="font-bold text-sm md:text-base">Dúvidas | Suporte</span>
+            <span className="text-sm md:text-base">unb.tedx@gmail.com</span>
+            
+            <p className="text-[9px] md:text-[10px] leading-tight font-medium mt-3 max-w-[220px]">
+              Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
+            </p>
           </div>
           
         </div>

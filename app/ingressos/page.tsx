@@ -68,6 +68,7 @@ export default function IngressosPage() {
 
     try {
       setLoading(true)
+      // 1. Cadastra o participante na sua API principal
       const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -81,9 +82,43 @@ export default function IngressosPage() {
         return
       }
 
+      // 2. Atualiza a tela com o QR Code e o nome do participante
       setQrCodeUrl(data.qr_code_base64)
       setAttendeeName(payload.nome_completo)
       setSubmitted(true)
+
+      // 3. Aguarda a tela desenhar o ingresso (setTimeout pequeno) para podermos capturá-lo
+      setTimeout(async () => {
+        if (!ticketRef.current) return;
+
+        // Captura o ingresso como PNG em segundo plano
+        const canvas = await html2canvas(ticketRef.current, {
+          backgroundColor: '#ffffff',
+          scale: 2, // Uma escala levemente menor para o arquivo de e-mail não ficar pesado demais
+          useCORS: true,
+          logging: false,
+        });
+
+        const arquivoBase64 = canvas.toDataURL('image/png', 0.9);
+
+        // Dispara o e-mail pela sua nova rota
+        try {
+          await fetch('/api/enviar-ingresso', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              nome: payload.nome_completo,
+              emailDestino: payload.email,
+              arquivoBase64: arquivoBase64
+            })
+          });
+          // Se quiser, você pode colocar um console.log aqui para saber que enviou:
+          // console.log("E-mail de ingresso enviado com sucesso!");
+        } catch (emailError) {
+          console.error("Erro ao disparar a rota de e-mail:", emailError);
+        }
+      }, 500); // 500 milissegundos é tempo suficiente para o React renderizar a div antes do html2canvas agir
+
     } catch (error) {
       alert('Não foi possível conectar ao servidor. Verifique se a API está rodando.')
     } finally {
@@ -380,39 +415,41 @@ export default function IngressosPage() {
       </main>
 
       {/* RODAPÉ */}
-      <footer className="w-full bg-black text-white py-10 px-6 md:px-12 border-t border-black">
-        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-8 text-sm">
+      <footer className="w-full bg-white text-black py-8 px-6 md:px-12 border-t border-gray-300">
+        <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           
-          {/* BLOCO 1: Realização (Empilhado: Latinoamerica em cima, UnB em baixo) */}
-          <div className="flex flex-col gap-3">
-            <span className="font-normal text-xs uppercase tracking-widest text-gray-400">Realização:</span>
+          {/* BLOCO 1: Logos (UnB, Realização, Fomento) */}
+          <div className="flex-1 flex justify-center md:justify-start w-full">
+            <img 
+              src="/Ativo 23-8.png" 
+              alt="Marcas Realização e Fomento" 
+              className="w-full max-w-3xl h-auto object-contain" 
+            />
+          </div>
+          
+          {/* BLOCO 2: Contato e Licença */}
+          <div className="flex flex-col items-center text-center shrink-0">
+            {/* Ícone do Instagram (com 'invert' para ficar preto no fundo branco) */}
+            <a 
+              href="https://www.instagram.com/unb.tedx?psln=MWsxcmh2aW51NHdoNA==" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="mb-1 hover:opacity-70 transition-opacity"
+              aria-label="Instagram TEDx UnB"
+            >
+              <img 
+                src="/IG-8.png" 
+                alt="Instagram" 
+                className="h-8 w-8 object-contain invert" 
+              />
+            </a>
+
+            <span className="font-bold text-sm md:text-base">Dúvidas | Suporte</span>
+            <span className="text-sm md:text-base">unb.tedx@gmail.com</span>
             
-            <div className="flex flex-col items-start gap-2.5">
-              {/* Logo do Instituto Latinoamerica */}
-              <img 
-                src="/logo-8.png" 
-                alt="Instituto Latinoamerica" 
-                className="h-10 md:h-12 w-auto object-contain" 
-              />
-              
-              {/* Logo da UnB */}
-              <img 
-                src="/unb-8.png" 
-                alt="Universidade de Brasília" 
-                className="h-6 md:h-7 w-auto object-contain" 
-              />
-            </div>
-          </div>
-          
-          {/* BLOCO 2: Dúvidas / Suporte */}
-          <div className="flex flex-col items-start md:items-center text-left md:text-center">
-            <span className="font-bold text-base text-white">Dúvidas | Suporte</span>
-            <span className="text-base mt-1 text-gray-300">unb.tedx@gmail.com</span>
-          </div>
-          
-          {/* BLOCO 3: Nota da Licença TED */}
-          <div className="text-left md:text-right max-w-xs text-xs leading-relaxed text-gray-400">
-            Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
+            <p className="text-[9px] md:text-[10px] leading-tight font-medium mt-3 max-w-[220px]">
+              Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
+            </p>
           </div>
           
         </div>
