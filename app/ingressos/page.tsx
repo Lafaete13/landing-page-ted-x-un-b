@@ -308,7 +308,17 @@ export default function IngressosPage() {
               <div className="success-check" style={{ backgroundColor: '#e8474a' }}><Check size={23} /></div>
               <p className="card-kicker" style={{ color: '#e8474a' }}>Ingresso confirmado</p>
               <h2>Nos vemos no TEDx!</h2>
-              <p className="success-copy">Seu ingresso gratuito está reservado. Apresente este ticket no credenciamento e verifique sua caixa de spam caso não encontre o e-mail.</p>
+              <p className="success-copy">Seu ingresso gratuito está reservado. Baixe seu ticket abaixo e apresente no credenciamento.</p>
+              
+              {/* AVISO DE SPAM DESTACADO NA TELA DE SUCESSO */}
+              <div style={{ backgroundColor: 'rgba(232, 71, 74, 0.1)', padding: '12px 16px', borderRadius: '8px', margin: '16px 0', border: '1px solid #e8474a', textAlign: 'left' }}>
+                <p style={{ margin: '0 0 4px 0', fontSize: '0.85rem', fontWeight: 'bold', color: '#e8474a' }}>
+                  ⚠️ Olhou o e-mail e não achou?
+                </p>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: '#ccc', lineHeight: '1.4' }}>
+                  Enviamos o ingresso no seu e-mail agora mesmo! Caso não esteja na Caixa de Entrada, dê uma olhada na pasta de <strong>Spam</strong> ou <strong>Lixo Eletrônico</strong>.
+                </p>
+              </div>
               
               {/* MODELO DO INGRESSO RENDERIZADO */}
               <div

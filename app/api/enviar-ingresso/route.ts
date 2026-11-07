@@ -16,7 +16,7 @@ export async function POST(request: Request) {
 
     // A mensagem bonitinha do e-mail
     const mailOptions = {
-      from: `"TEDx UnB" <${process.env.EMAIL_USER}>`,
+      from: `"TEDx Universidade de Brasília" <${process.env.EMAIL_USER}>`,
       to: emailDestino,
       subject: 'Seu Ingresso para o TEDx UnB: Vários Futuros chegou! 🎉',
       html: `
@@ -35,16 +35,23 @@ export async function POST(request: Request) {
               <p style="margin: 5px 0;"><strong>📍 Local:</strong> Centro de Excelência em Turismo (CET/UnB)</p>
             </div>
 
+            <!-- AVISO DE SPAM ADICIONADO -->
+            <div style="background-color: #fff3f3; padding: 12px; border-radius: 6px; margin: 20px 0; border: 1px dashed #e8474a;">
+              <p style="margin: 0; font-size: 14px; color: #b91c1c;">
+                ⚠️ <strong>Dica importante:</strong> Caso não encontre este e-mail na sua Caixa de Entrada nos próximos minutos, verifique também a sua pasta de <strong>Spam ou Lixo Eletrônico</strong>.
+              </p>
+            </div>
+
             <p style="font-size: 16px;">Estamos muito felizes em ter você com a gente para imaginar esses vários futuros!</p>
             <br/>
-            <p style="font-size: 14px; color: #666;">Um abraço,<br/><strong>Equipe TEDx UnB</strong></p>
+            <p style="font-size: 14px; color: #666;">Um abraço,<br/><strong>TEDx Universidade de Brasília</strong></p>
           </div>
         </div>
       `,
       attachments: [
         {
-          filename: 'Ingresso-TEDxUnB.png', // Corrigido para .png para bater com o formato da imagem
-          content: arquivoBase64.split("base64,")[1], // Pega apenas os dados puros do arquivo
+          filename: 'Ingresso-TEDxUnB.png',
+          content: arquivoBase64.split("base64,")[1],
           encoding: 'base64'
         }
       ]
