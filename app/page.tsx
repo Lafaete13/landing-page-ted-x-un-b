@@ -51,12 +51,13 @@ export default function Home() {
       {/* SECÇÃO HERO (SOBRE) */}
       <main id="sobre" className="w-full flex flex-col md:flex-row bg-[#b2b2b2] items-stretch border-b border-black">
         
-      {/* Esquerda: Imagem deslocada para cima */}
+        {/* Esquerda: Imagem deslocada mais para o topo */}
         <div className="w-full md:w-1/2 bg-white relative overflow-hidden min-h-[35vh] md:min-h-[85vh]">
           <img 
             src="/mao-8.png" 
             alt="Mãos segurando figura geométrica" 
-            className="absolute inset-0 w-full h-full object-cover object-[100%_0%] scale-110 block" 
+            /* Adicionamos -translate-y-4 (mobile) e md:-translate-y-8 (desktop) para forçar a imagem a subir um pouco mais */
+            className="absolute inset-0 w-full h-full object-cover object-[100%_0%] scale-110 -translate-y-4 md:-translate-y-20 block" 
           />
         </div>
 
@@ -80,8 +81,8 @@ export default function Home() {
               Das culturas ancestrais que firmam resistência aos espaços de produção dos saberes acadêmicos, propomos um diálogo atemporal para refletir e imaginar os tempos, suas nuances e potências por meio de narrativas pluriversas.
             </p>
 
-            {/* Nota da Licença TED */}
-            <p className="text-sm md:text-base lg:text-lg text-black font-normal mt-6">
+            {/* Nota da Licença TED: Fonte diminuída e cor suavizada */}
+            <p className="text-xs md:text-sm text-black/70 font-normal mt-8">
               Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
             </p>
             
