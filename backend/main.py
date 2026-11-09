@@ -40,9 +40,9 @@ def on_startup():
 class IngressoCreate(BaseModel):
     nome_completo: str
     email: str
-    data_nascimento: str
+    cpf: Optional[str] = None         # <-- Adicionado!
+    tipo_participante: str            # <-- Adicionado!
     eh_aluno_unb: bool = False
-    curso: Optional[str] = None
     matricula: Optional[str] = None
 
 # Função auxiliar para gerar a imagem do QR Code em Base64

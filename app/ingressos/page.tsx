@@ -65,6 +65,7 @@ export default function IngressosPage() {
     const form = new FormData(event.currentTarget)
     const email = String(form.get('email') || '')
     const confirmation = String(form.get('confirmation') || '')
+    const cpfValue = String(form.get('cpf') || '').trim()
 
     if (email !== confirmation) {
       setEmailError('Os e-mails precisam ser iguais.')
@@ -75,11 +76,9 @@ export default function IngressosPage() {
     const payload = {
       nome_completo: String(form.get('name')),
       email: email,
-      cpf: String(form.get('cpf')),
-      data_nascimento: String(form.get('birthdate')),
+      cpf: cpfValue !== '' ? cpfValue : null,
       tipo_participante: tipoParticipante,
       eh_aluno_unb: tipoParticipante === 'aluno',
-      curso: tipoParticipante === 'aluno' ? String(form.get('course')) : null,
       matricula: tipoParticipante === 'aluno' ? String(form.get('registration')) : null,
     }
 
@@ -277,14 +276,12 @@ export default function IngressosPage() {
 
               <div className="form-grid">
                 <label>Nome completo<input name="name" type="text" placeholder="Como podemos te chamar?" required /></label>
-                <label>CPF (para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" required /></label>
+                <label>CPF (opcional para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" /></label>
                 <label>E-mail<input name="email" type="email" placeholder="voce@email.com" required /></label>
                 <label>Confirmar e-mail<input name="confirmation" type="email" placeholder="Digite seu e-mail novamente" required onChange={() => setEmailError('')} /></label>
-                <label>Data de nascimento<input name="birthdate" type="date" required /></label>
 
                 {tipoParticipante === 'aluno' && (
                   <>
-                    <label>Curso<input name="course" type="text" placeholder="Ex.: Comunicação Social" required /></label>
                     <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
                   </>
                 )}

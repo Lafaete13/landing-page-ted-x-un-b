@@ -10,13 +10,11 @@ class Ingresso(SQLModel, table=True):
     # Dados do formulário
     nome_completo: str
     email: str = Field(unique=True, index=True)
-    cpf: str
-    data_nascimento: str
+    cpf: Optional[str] = None  # Ajustado para opcional
     tipo_participante: str  # "aluno" ou "externo"
     
-    # Dados da UnB (opcionais para comunidade externa)
+    # Dados da UnB
     eh_aluno_unb: bool = Field(default=False)
-    curso: Optional[str] = None
     matricula: Optional[str] = None
     
     # Controle da Portaria com Fuso Horário (UTC)
