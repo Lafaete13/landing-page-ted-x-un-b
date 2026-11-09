@@ -343,11 +343,11 @@ export default function IngressosPage() {
                 {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) */}
                 <div style={{
                   position: 'absolute',
-                  top: '21%',
+                  top: '20%', /* Subimos levemente o bloco inteiro para não esbarrar na linha de baixo */
                   left: '0',
                   width: '100%',
                   display: 'flex',
-                  alignItems: 'flex-start',
+                  alignItems: 'center', /* Alterado de flex-start para center para manter as 3 colunas alinhadas no eixo Y */
                   justifyContent: 'space-between', 
                   padding: '0 8%',
                   color: '#111',
@@ -356,21 +356,21 @@ export default function IngressosPage() {
                   {/* COLUNA 1: DATA */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
-                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>19</div>
+                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '0.9', margin: '8px 0' }}>19</div>
                     <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
 
                   {/* COLUNA 2: HORÁRIO */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
-                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>14h</div>
+                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '0.9', margin: '8px 0' }}>14h</div>
                     <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
                   </div>
 
                   {/* COLUNA 3: LOCAL */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
                     <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                    <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '12px' }}>Centro de<br />Excelência<br />em Turismo</div>
+                    <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '10px' }}>Centro de<br />Excelência<br />em Turismo</div>
                     <div style={{ fontSize: '0.58rem', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
@@ -379,7 +379,7 @@ export default function IngressosPage() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: '41.5%',
+                    top: '42%', /* Ajuste fino para cravar a altura exata do alinhamento */
                     left: '26%',  
                     width: '68%',
                     textAlign: 'left',
@@ -389,6 +389,8 @@ export default function IngressosPage() {
                     overflow: 'visible',
                     margin: 0,
                     padding: 0,
+                    display: 'flex',
+                    alignItems: 'center' /* Garante que o texto renderizado alinhe certinho pelo meio */
                   }}
                 >
                   <span style={{ fontSize: '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
