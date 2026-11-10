@@ -330,14 +330,15 @@ export default function IngressosPage() {
                   userSelect: 'none',
                   backgroundColor: '#fff', 
                   borderRadius: '16px', 
-                  overflow: 'hidden', 
+                  overflow: 'hidden',
+                  containerType: 'inline-size', // Essencial para as fontes escalarem com o card
                 }}
               >
                 {/* Template Imagem de Fundo */}
                 <img
                   src="/ingresso-template.png"
                   alt="Template Ingresso TEDx"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  style={{ width: '100%', height: 'auto', display: 'block', aspectRatio: '430/505' }}
                 />
 
                 {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) */}
@@ -355,23 +356,23 @@ export default function IngressosPage() {
                 }}>
                   {/* COLUNA 1: DATA */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Data:</div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>19</div>
-                    <div style={{ fontSize: '0.55rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
+                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Data:</div>
+                    <div style={{ fontSize: '12cqw', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>19</div>
+                    <div style={{ fontSize: '3cqw', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
 
                   {/* COLUNA 2: HORÁRIO */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Horário:</div>
-                    <div style={{ fontSize: '1.75rem', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>14h</div>
-                    <div style={{ fontSize: '0.55rem', fontWeight: 'bold' }}>Credenciamento</div>
+                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Horário:</div>
+                    <div style={{ fontSize: '12cqw', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>14h</div>
+                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Credenciamento</div>
                   </div>
 
                   {/* COLUNA 3: LOCAL */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Local:</div>
-                    <div style={{ fontSize: '0.55rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '10%' }}>Centro de<br />Excelência<br />em Turismo</div>
-                    <div style={{ fontSize: '0.55rem', marginTop: '4%', fontWeight: '500' }}>CET - UnB</div>
+                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Local:</div>
+                    <div style={{ fontSize: '3cqw', fontWeight: 'bold', lineHeight: '1.25', marginTop: '10%' }}>Centro de<br />Excelência<br />em Turismo</div>
+                    <div style={{ fontSize: '3cqw', marginTop: '4%', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
 
@@ -380,19 +381,19 @@ export default function IngressosPage() {
                   style={{
                     position: 'absolute',
                     top: '41.5%',
-                    left: '32%', // Puxado mais para a direita para não sobrepor o texto do fundo
-                    width: '62%',
+                    left: '26%',
+                    width: '68%',
                     textAlign: 'left',
                     color: '#111',
                     whiteSpace: 'nowrap',
                     lineHeight: '1',
-                    overflow: 'hidden', // Esconde se o nome for gigante
-                    textOverflow: 'ellipsis', // Adiciona "..." se o nome for maior que o espaço
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis', 
                     margin: 0,
                     padding: 0,
                   }}
                 >
-                  <span style={{ fontSize: '0.75rem', fontWeight: '900', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: '4.5cqw', fontWeight: '900', textTransform: 'uppercase' }}>
                     {attendeeName}
                   </span>
                 </div>
@@ -405,11 +406,11 @@ export default function IngressosPage() {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     backgroundColor: '#fff',
-                    padding: '2.5%', // Margem interna dinâmica
+                    padding: '2.5%',
                     borderRadius: '12px',
                     border: '1px solid #e5e5e5',
-                    width: '32%', // Agora o tamanho é responsivo com a tela
-                    aspectRatio: '1 / 1', // Força ele a ser sempre um quadrado perfeito
+                    width: '35%', 
+                    aspectRatio: '1 / 1', 
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -429,10 +430,10 @@ export default function IngressosPage() {
                 </div>
 
                 {/* RODAPÉ COLORIDO: UnB e 2026 */}
-                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: '0.7rem', fontWeight: 'bold', color: '#111' }}>
+                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: '3.5cqw', fontWeight: 'bold', color: '#111' }}>
                   UnB
                 </div>
-                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: '0.7rem', fontWeight: 'bold', color: '#111' }}>
+                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: '3.5cqw', fontWeight: 'bold', color: '#111' }}>
                   2026
                 </div>
               </div>
