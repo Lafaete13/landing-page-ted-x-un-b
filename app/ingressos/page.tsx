@@ -343,11 +343,11 @@ export default function IngressosPage() {
                 {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) */}
                 <div style={{
                   position: 'absolute',
-                  top: '20%', /* Subimos levemente o bloco inteiro para não esbarrar na linha de baixo */
+                  top: '21%',
                   left: '0',
                   width: '100%',
                   display: 'flex',
-                  alignItems: 'center', /* Alterado de flex-start para center para manter as 3 colunas alinhadas no eixo Y */
+                  alignItems: 'flex-start',
                   justifyContent: 'space-between', 
                   padding: '0 8%',
                   color: '#111',
@@ -355,23 +355,23 @@ export default function IngressosPage() {
                 }}>
                   {/* COLUNA 1: DATA */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Data:</div>
-                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '0.9', margin: '8px 0' }}>19</div>
-                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Data:</div>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>19</div>
+                    <div style={{ fontSize: '0.55rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
 
                   {/* COLUNA 2: HORÁRIO */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Horário:</div>
-                    <div style={{ fontSize: '2.1rem', fontWeight: '900', lineHeight: '0.9', margin: '8px 0' }}>14h</div>
-                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Horário:</div>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>14h</div>
+                    <div style={{ fontSize: '0.55rem', fontWeight: 'bold' }}>Credenciamento</div>
                   </div>
 
                   {/* COLUNA 3: LOCAL */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                    <div style={{ fontSize: '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '10px' }}>Centro de<br />Excelência<br />em Turismo</div>
-                    <div style={{ fontSize: '0.58rem', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
+                    <div style={{ fontSize: '0.6rem', fontWeight: 'bold' }}>Local:</div>
+                    <div style={{ fontSize: '0.55rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: '10%' }}>Centro de<br />Excelência<br />em Turismo</div>
+                    <div style={{ fontSize: '0.55rem', marginTop: '4%', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
 
@@ -379,21 +379,20 @@ export default function IngressosPage() {
                 <div
                   style={{
                     position: 'absolute',
-                    top: '42%', /* Ajuste fino para cravar a altura exata do alinhamento */
-                    left: '26%',  
-                    width: '68%',
+                    top: '41.5%',
+                    left: '32%', // Puxado mais para a direita para não sobrepor o texto do fundo
+                    width: '62%',
                     textAlign: 'left',
                     color: '#111',
                     whiteSpace: 'nowrap',
                     lineHeight: '1',
-                    overflow: 'visible',
+                    overflow: 'hidden', // Esconde se o nome for gigante
+                    textOverflow: 'ellipsis', // Adiciona "..." se o nome for maior que o espaço
                     margin: 0,
                     padding: 0,
-                    display: 'flex',
-                    alignItems: 'center' /* Garante que o texto renderizado alinhe certinho pelo meio */
                   }}
                 >
-                  <span style={{ fontSize: '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '900', textTransform: 'uppercase' }}>
                     {attendeeName}
                   </span>
                 </div>
@@ -406,27 +405,34 @@ export default function IngressosPage() {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     backgroundColor: '#fff',
-                    padding: '8px',
+                    padding: '2.5%', // Margem interna dinâmica
                     borderRadius: '12px',
                     border: '1px solid #e5e5e5',
+                    width: '32%', // Agora o tamanho é responsivo com a tela
+                    aspectRatio: '1 / 1', // Força ele a ser sempre um quadrado perfeito
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
                   {qrCodeUrl ? (
                     <img
                       src={qrCodeUrl}
                       alt="QR Code do Ingresso"
-                      style={{ width: '130px', height: '130px', display: 'block', borderRadius: '4px' }}
+                      style={{ width: '100%', height: '100%', display: 'block', borderRadius: '4px', objectFit: 'contain' }}
                     />
                   ) : (
-                    <QrCode />
+                    <div style={{ width: '100%', height: '100%' }}>
+                       <QrCode />
+                    </div>
                   )}
                 </div>
 
                 {/* RODAPÉ COLORIDO: UnB e 2026 */}
-                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: '0.75rem', fontWeight: 'bold', color: '#111' }}>
+                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: '0.7rem', fontWeight: 'bold', color: '#111' }}>
                   UnB
                 </div>
-                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: '0.75rem', fontWeight: 'bold', color: '#111' }}>
+                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: '0.7rem', fontWeight: 'bold', color: '#111' }}>
                   2026
                 </div>
               </div>
