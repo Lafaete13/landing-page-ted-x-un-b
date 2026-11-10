@@ -34,6 +34,25 @@ function QrCode() {
   )
 }
 
+// Hook para detectar se é mobile ou desktop
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    // Configura o valor inicial
+    handleResize()
+    
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return isMobile
+}
+
 export default function IngressosPage() {
   const [tipoParticipante, setTipoParticipante] = useState<'aluno' | 'externo'>('aluno')
   const [submitted, setSubmitted] = useState(false)
@@ -43,22 +62,24 @@ export default function IngressosPage() {
   const [loading, setLoading] = useState(false)
   const [totalIngressos, setTotalIngressos] = useState<number>(0)
   const ticketRef = useRef<HTMLDivElement>(null)
+  
+  const isMobile = useIsMobile()
 
   // Busca a contagem de ingressos emitidos ao carregar a página
   useEffect(() => {
-  async function carregarContagem() {
-    try {
-      const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos/total')
-      const data = await res.json()
-      if (res.ok && data.total !== undefined) {
-        setTotalIngressos(data.total)
+    async function carregarContagem() {
+      try {
+        const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos/total')
+        const data = await res.json()
+        if (res.ok && data.total !== undefined) {
+          setTotalIngressos(data.total)
+        }
+      } catch (err) {
+        console.error("Erro ao buscar total de ingressos", err)
       }
-    } catch (err) {
-      console.error("Erro ao buscar total de ingressos", err)
     }
-  }
-  carregarContagem()
-}, [])
+    carregarContagem()
+  }, [])
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -103,7 +124,7 @@ export default function IngressosPage() {
       setAttendeeName(payload.nome_completo)
       setSubmitted(true)
 
-      // ADICIONE ESTA LINHA AQUI PARA ATUALIZAR O CONTADOR NA HORA:
+      // Atualiza o contador na hora
       setTotalIngressos((prev) => prev + 1)
 
       // 3. Aguarda a tela desenhar o ingresso
@@ -116,6 +137,9 @@ export default function IngressosPage() {
             scale: 2,
             useCORS: true,
             logging: false,
+            // Importante: força o html2canvas a renderizar no tamanho original, ignorando o scroll/tamanho da tela
+            windowWidth: ticketRef.current.scrollWidth,
+            windowHeight: ticketRef.current.scrollHeight
           });
 
           const arquivoBase64 = canvas.toDataURL('image/png', 0.9);
@@ -142,7 +166,7 @@ export default function IngressosPage() {
         } catch (err) {
           console.error("Erro interno no processo de captura/envio:", err);
         }
-      }, 500);
+      }, 800); // Aumentei um pouco o tempo para garantir que a imagem de fundo carregou
 
     } catch (error) {
       alert('Não foi possível conectar ao servidor. Verifique se a API está rodando.')
@@ -161,6 +185,8 @@ export default function IngressosPage() {
       scale: 3, 
       useCORS: true,
       logging: false,
+      windowWidth: ticketRef.current.scrollWidth,
+      windowHeight: ticketRef.current.scrollHeight
     })
 
     const link = document.createElement('a')
@@ -179,6 +205,8 @@ export default function IngressosPage() {
       scale: 3,
       useCORS: true,
       logging: false,
+      windowWidth: ticketRef.current.scrollWidth,
+      windowHeight: ticketRef.current.scrollHeight
     })
 
     const imgData = canvas.toDataURL('image/png', 1.0)
@@ -317,34 +345,33 @@ export default function IngressosPage() {
                 </p>
               </div>
               
-              {/* MODELO DO INGRESSO RENDERIZADO */}
+              {/* MODELO DO INGRESSO RENDERIZADO COM LÓGICA DE MOBILE/DESKTOP */}
               <div
                 ref={ticketRef}
                 style={{
                   position: 'relative',
                   width: '100%',
-                  maxWidth: '430px',
+                  maxWidth: isMobile ? '350px' : '430px', // Ajusta o tamanho da div para mobile/desktop
                   margin: '0 auto',
                   fontFamily: 'Inter, Arial, sans-serif',
                   color: '#000',
                   userSelect: 'none',
                   backgroundColor: '#fff', 
                   borderRadius: '16px', 
-                  overflow: 'hidden',
-                  containerType: 'inline-size', // Essencial para as fontes escalarem com o card
+                  overflow: 'hidden', 
                 }}
               >
                 {/* Template Imagem de Fundo */}
                 <img
                   src="/ingresso-template.png"
                   alt="Template Ingresso TEDx"
-                  style={{ width: '100%', height: 'auto', display: 'block', aspectRatio: '430/505' }}
+                  style={{ width: '100%', height: 'auto', display: 'block' }}
                 />
 
-                {/* INFORMAÇÕES DO EVENTO (DATA, HORÁRIO E LOCAL) */}
+                {/* INFORMAÇÕES DO EVENTO */}
                 <div style={{
                   position: 'absolute',
-                  top: '21%',
+                  top: isMobile ? '22%' : '21%',
                   left: '0',
                   width: '100%',
                   display: 'flex',
@@ -354,51 +381,50 @@ export default function IngressosPage() {
                   color: '#111',
                   boxSizing: 'border-box'
                 }}>
-                  {/* COLUNA 1: DATA */}
+                  {/* DATA */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Data:</div>
-                    <div style={{ fontSize: '12cqw', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>19</div>
-                    <div style={{ fontSize: '3cqw', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
+                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.65rem', fontWeight: 'bold' }}>Data:</div>
+                    <div style={{ fontSize: isMobile ? '1.5rem' : '2.1rem', fontWeight: '900', lineHeight: '1', margin: isMobile ? '6px 0' : '10px 0' }}>19</div>
+                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
                   </div>
 
-                  {/* COLUNA 2: HORÁRIO */}
+                  {/* HORÁRIO */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Horário:</div>
-                    <div style={{ fontSize: '12cqw', fontWeight: '900', lineHeight: '1', margin: '8% 0' }}>14h</div>
-                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Credenciamento</div>
+                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.65rem', fontWeight: 'bold' }}>Horário:</div>
+                    <div style={{ fontSize: isMobile ? '1.5rem' : '2.1rem', fontWeight: '900', lineHeight: '1', margin: isMobile ? '6px 0' : '10px 0' }}>14h</div>
+                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
                   </div>
 
-                  {/* COLUNA 3: LOCAL */}
+                  {/* LOCAL */}
                   <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: '3cqw', fontWeight: 'bold' }}>Local:</div>
-                    <div style={{ fontSize: '3cqw', fontWeight: 'bold', lineHeight: '1.25', marginTop: '10%' }}>Centro de<br />Excelência<br />em Turismo</div>
-                    <div style={{ fontSize: '3cqw', marginTop: '4%', fontWeight: '500' }}>CET - UnB</div>
+                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.65rem', fontWeight: 'bold' }}>Local:</div>
+                    <div style={{ fontSize: isMobile ? '0.45rem' : '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: isMobile ? '8px' : '12px' }}>Centro de<br />Excelência<br />em Turismo</div>
+                    <div style={{ fontSize: isMobile ? '0.45rem' : '0.58rem', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
                   </div>
                 </div>
 
-                {/* NOME DO PARTICIPANTE DINÂMICO */}
+                {/* NOME DO PARTICIPANTE */}
                 <div
                   style={{
                     position: 'absolute',
-                    top: '41.5%',
-                    left: '26%',
+                    top: isMobile ? '42%' : '41.5%',
+                    left: '26%',  
                     width: '68%',
                     textAlign: 'left',
                     color: '#111',
                     whiteSpace: 'nowrap',
                     lineHeight: '1',
-                    overflow: 'hidden', 
-                    textOverflow: 'ellipsis', 
+                    overflow: 'visible',
                     margin: 0,
                     padding: 0,
                   }}
                 >
-                  <span style={{ fontSize: '4.5cqw', fontWeight: '900', textTransform: 'uppercase' }}>
+                  <span style={{ fontSize: isMobile ? '0.7rem' : '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
                     {attendeeName}
                   </span>
                 </div>
 
-                {/* QR CODE DINÂMICO */}
+                {/* QR CODE */}
                 <div
                   style={{
                     position: 'absolute',
@@ -406,34 +432,29 @@ export default function IngressosPage() {
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     backgroundColor: '#fff',
-                    padding: '2.5%',
+                    padding: isMobile ? '6px' : '8px',
                     borderRadius: '12px',
                     border: '1px solid #e5e5e5',
-                    width: '35%', 
-                    aspectRatio: '1 / 1', 
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
                   }}
                 >
                   {qrCodeUrl ? (
                     <img
                       src={qrCodeUrl}
                       alt="QR Code do Ingresso"
-                      style={{ width: '100%', height: '100%', display: 'block', borderRadius: '4px', objectFit: 'contain' }}
+                      style={{ width: isMobile ? '100px' : '130px', height: isMobile ? '100px' : '130px', display: 'block', borderRadius: '4px' }}
                     />
                   ) : (
-                    <div style={{ width: '100%', height: '100%' }}>
-                       <QrCode />
+                    <div style={{ width: isMobile ? '100px' : '130px', height: isMobile ? '100px' : '130px' }}>
+                      <QrCode />
                     </div>
                   )}
                 </div>
 
-                {/* RODAPÉ COLORIDO: UnB e 2026 */}
-                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: '3.5cqw', fontWeight: 'bold', color: '#111' }}>
+                {/* RODAPÉ COLORIDO */}
+                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: isMobile ? '0.6rem' : '0.75rem', fontWeight: 'bold', color: '#111' }}>
                   UnB
                 </div>
-                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: '3.5cqw', fontWeight: 'bold', color: '#111' }}>
+                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: isMobile ? '0.6rem' : '0.75rem', fontWeight: 'bold', color: '#111' }}>
                   2026
                 </div>
               </div>
