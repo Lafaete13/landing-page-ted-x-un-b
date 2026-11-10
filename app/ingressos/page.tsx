@@ -34,25 +34,6 @@ function QrCode() {
   )
 }
 
-// Hook para detectar se é mobile ou desktop
-function useIsMobile() {
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    
-    // Configura o valor inicial
-    handleResize()
-    
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  return isMobile
-}
-
 export default function IngressosPage() {
   const [tipoParticipante, setTipoParticipante] = useState<'aluno' | 'externo'>('aluno')
   const [submitted, setSubmitted] = useState(false)
@@ -61,11 +42,23 @@ export default function IngressosPage() {
   const [qrCodeUrl, setQrCodeUrl] = useState('')
   const [loading, setLoading] = useState(false)
   const [totalIngressos, setTotalIngressos] = useState<number>(0)
-  const ticketRef = useRef<HTMLDivElement>(null)
   
-  const isMobile = useIsMobile()
+  const ticketRef = useRef<HTMLDivElement>(null)
 
-  // Busca a contagem de ingressos emitidos ao carregar a página
+  const [scale, setScale] = useState(1)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 462) {
+        setScale((window.innerWidth - 32) / 430)
+      } else {
+        setScale(1)
+      }
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   useEffect(() => {
     async function carregarContagem() {
       try {
@@ -105,7 +98,6 @@ export default function IngressosPage() {
 
     try {
       setLoading(true)
-      // 1. Cadastra o participante na sua API principal
       const res = await fetch('https://landing-page-ted-x-un-b.onrender.com/api/ingressos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -119,33 +111,25 @@ export default function IngressosPage() {
         return
       }
 
-      // 2. Atualiza a tela com o QR Code e o nome do participante
       setQrCodeUrl(data.qr_code_base64)
       setAttendeeName(payload.nome_completo)
       setSubmitted(true)
-
-      // Atualiza o contador na hora
       setTotalIngressos((prev) => prev + 1)
 
-      // 3. Aguarda a tela desenhar o ingresso
       setTimeout(async () => {
         if (!ticketRef.current) return;
-
         try {
           const canvas = await html2canvas(ticketRef.current, {
             backgroundColor: '#ffffff',
-            scale: 2,
+            scale: 3, 
             useCORS: true,
             logging: false,
-            // Importante: força o html2canvas a renderizar no tamanho original, ignorando o scroll/tamanho da tela
-            windowWidth: ticketRef.current.scrollWidth,
-            windowHeight: ticketRef.current.scrollHeight
           });
 
           const arquivoBase64 = canvas.toDataURL('image/png', 0.9);
           console.log("Canvas gerado com sucesso, disparando e-mail...");
 
-          const emailRes = await fetch('/api/enviar-ingresso', {
+          fetch('/api/enviar-ingresso', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -154,19 +138,10 @@ export default function IngressosPage() {
               arquivoBase64: arquivoBase64
             })
           });
-
-          const emailData = await emailRes.json();
-          
-          if (!emailRes.ok) {
-            console.error("Erro retornado pela API de e-mail:", emailData);
-          } else {
-            console.log("E-mail disparado com sucesso!", emailData);
-          }
-
         } catch (err) {
           console.error("Erro interno no processo de captura/envio:", err);
         }
-      }, 800); // Aumentei um pouco o tempo para garantir que a imagem de fundo carregou
+      }, 800); 
 
     } catch (error) {
       alert('Não foi possível conectar ao servidor. Verifique se a API está rodando.')
@@ -177,7 +152,6 @@ export default function IngressosPage() {
 
   async function downloadTicketPNG() {
     if (!ticketRef.current) return
-
     window.scrollTo(0, 0)
     
     const canvas = await html2canvas(ticketRef.current, {
@@ -185,8 +159,6 @@ export default function IngressosPage() {
       scale: 3, 
       useCORS: true,
       logging: false,
-      windowWidth: ticketRef.current.scrollWidth,
-      windowHeight: ticketRef.current.scrollHeight
     })
 
     const link = document.createElement('a')
@@ -197,7 +169,6 @@ export default function IngressosPage() {
 
   async function downloadTicketPDF() {
     if (!ticketRef.current) return
-
     window.scrollTo(0, 0)
 
     const canvas = await html2canvas(ticketRef.current, {
@@ -205,24 +176,138 @@ export default function IngressosPage() {
       scale: 3,
       useCORS: true,
       logging: false,
-      windowWidth: ticketRef.current.scrollWidth,
-      windowHeight: ticketRef.current.scrollHeight
     })
 
     const imgData = canvas.toDataURL('image/png', 1.0)
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'px',
-      format: [canvas.width / 3, canvas.height / 3],
+      format: [430, 515], 
     })
 
-    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 3, canvas.height / 3)
+    pdf.addImage(imgData, 'PNG', 0, 0, 430, 515)
     pdf.save(`ingresso-tedx-unb-${attendeeName.toLowerCase().replace(/\s+/g, '-')}.pdf`)
   }
 
+  const renderTicketLayout = (isForCapture: boolean) => (
+    <div
+      ref={isForCapture ? ticketRef : null}
+      style={{
+        position: 'relative',
+        width: '430px', 
+        height: '515px', 
+        margin: '0',
+        fontFamily: 'Inter, Arial, sans-serif',
+        color: '#000',
+        userSelect: 'none',
+        backgroundColor: '#fff', 
+        borderRadius: '16px', 
+        overflow: 'hidden', 
+        boxSizing: 'border-box'
+      }}
+    >
+      <img
+        src="/ingresso-template.png"
+        alt="Template Ingresso TEDx"
+        style={{ width: '430px', height: '515px', display: 'block', objectFit: 'cover' }}
+      />
+
+      {/* MUDE O TOP DESTE BLOCO PARA 85px */}
+      <div style={{
+        position: 'absolute',
+        top: '85px', // <-- AQUI! Mudou de 108px para 85px
+        left: '0',
+        width: '430px',
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'space-between', 
+        padding: '0 34px',
+        color: '#111',
+        boxSizing: 'border-box'
+      }}>
+        <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold' }}>Data:</div>
+          <div style={{ fontSize: '38px', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>19</div>
+          <div style={{ fontSize: '11px', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
+        </div>
+        <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold' }}>Horário:</div>
+          <div style={{ fontSize: '38px', fontWeight: '900', lineHeight: '1', margin: '10px 0' }}>14h</div>
+          <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Credenciamento</div>
+        </div>
+        <div style={{ textAlign: 'center', width: '120px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold' }}>Local:</div>
+          <div style={{ fontSize: '11px', fontWeight: 'bold', lineHeight: '1.25', marginTop: '12px' }}>Centro de<br />Excelência<br />em Turismo</div>
+          <div style={{ fontSize: '10px', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
+        </div>
+      </div>
+
+      {/* CAIXA DE NOME CORRIGIDA */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '208px', 
+          left: '129px',
+          width: '275px',
+          height: '28px', // Altura fixa de segurança para a fonte não cortar
+          display: 'flex',
+          alignItems: 'center', 
+          textAlign: 'left',
+          color: '#111',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          margin: 0,
+          padding: 0,
+        }}
+      >
+        <span style={{ fontSize: '16px', fontWeight: '900', textTransform: 'uppercase', lineHeight: 'normal' }}>
+          {attendeeName}
+        </span>
+      </div>
+
+      <div
+        style={{
+          position: 'absolute',
+          top: '285px', 
+          left: '150px',
+          backgroundColor: '#fff',
+          padding: '8px',
+          borderRadius: '12px',
+          border: '1px solid #e5e5e5',
+          width: '130px', 
+          height: '130px', 
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxSizing: 'border-box',
+          overflow: 'hidden'
+        }}
+      >
+        {qrCodeUrl ? (
+          <img
+            src={qrCodeUrl}
+            alt="QR Code do Ingresso"
+            style={{ width: '114px', height: '114px', display: 'block', borderRadius: '4px' }}
+          />
+        ) : (
+          <div style={{ width: '114px', height: '114px', overflow: 'hidden' }}>
+            <QrCode />
+          </div>
+        )}
+      </div>
+
+      <div style={{ position: 'absolute', bottom: '18px', left: '26px', fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+        UnB
+      </div>
+      <div style={{ position: 'absolute', bottom: '18px', right: '26px', fontSize: '14px', fontWeight: 'bold', color: '#111' }}>
+        2026
+      </div>
+    </div>
+  )
+
   return (
     <div className="antialiased flex flex-col min-h-screen bg-[#b2b2b2]">
-      {/* BARRA DE NAVEGAÇÃO SUPERIOR */}
       <nav className="w-full bg-black py-6 px-6 md:px-12 z-50 border-b border-gray-800">
         <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
@@ -233,19 +318,13 @@ export default function IngressosPage() {
               </h1>
             </Link>
           </div>
-          
           <div className="flex items-center gap-4 md:gap-6 text-white font-medium text-sm md:text-base">
-            <Link href="/" className="hover:text-[#e8474a] transition-colors pr-4 md:pr-6 border-r border-gray-700">
-              Sobre
-            </Link>
-            <span className="font-bold text-[#e8474a]">
-              Ingressos
-            </span>
+            <Link href="/" className="hover:text-[#e8474a] transition-colors pr-4 md:pr-6 border-r border-gray-700">Sobre</Link>
+            <span className="font-bold text-[#e8474a]">Ingressos</span>
           </div>
         </div>
       </nav>
 
-      {/* SECÇÃO DO FORMULÁRIO DE INSCRIÇÃO */}
       <main className="flex-grow flex items-center justify-center py-12 px-4 md:px-8">
         <section className="w-full max-w-xl">
           {!submitted ? (
@@ -264,21 +343,15 @@ export default function IngressosPage() {
               </div>
               <p className="card-intro">Preencha seus dados para viver essa conversa sobre futuros.</p>
 
-              {/* SELEÇÃO DO TIPO DE PARTICIPANTE */}
               <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
                 <button
                   type="button"
                   onClick={() => setTipoParticipante('aluno')}
                   style={{
-                    flex: 1,
-                    padding: '12px',
-                    borderRadius: '8px',
+                    flex: 1, padding: '12px', borderRadius: '8px',
                     border: tipoParticipante === 'aluno' ? '2px solid #e8474a' : '1px solid #333',
                     backgroundColor: tipoParticipante === 'aluno' ? 'rgba(232, 71, 74, 0.18)' : '#181818',
-                    color: '#fff',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    color: '#fff', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s ease',
                   }}
                 >
                   Aluno UnB
@@ -287,15 +360,10 @@ export default function IngressosPage() {
                   type="button"
                   onClick={() => setTipoParticipante('externo')}
                   style={{
-                    flex: 1,
-                    padding: '12px',
-                    borderRadius: '8px',
+                    flex: 1, padding: '12px', borderRadius: '8px',
                     border: tipoParticipante === 'externo' ? '2px solid #e8474a' : '1px solid #333',
                     backgroundColor: tipoParticipante === 'externo' ? 'rgba(232, 71, 74, 0.18)' : '#181818',
-                    color: '#fff',
-                    fontWeight: 'bold',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
+                    color: '#fff', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s ease',
                   }}
                 >
                   Comunidade Externa
@@ -307,22 +375,14 @@ export default function IngressosPage() {
                 <label>CPF (opcional para certificado)<input name="cpf" type="text" placeholder="000.000.000-00" /></label>
                 <label>E-mail<input name="email" type="email" placeholder="voce@email.com" required /></label>
                 <label>Confirmar e-mail<input name="confirmation" type="email" placeholder="Digite seu e-mail novamente" required onChange={() => setEmailError('')} /></label>
-
                 {tipoParticipante === 'aluno' && (
-                  <>
-                    <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
-                  </>
+                  <label>Matrícula UnB<input name="registration" type="text" placeholder="Sua matrícula" required /></label>
                 )}
               </div>
 
               {emailError && <p className="form-error" role="alert">{emailError}</p>}
 
-              <button 
-                className="submit-button" 
-                type="submit" 
-                disabled={loading} 
-                style={{ marginTop: '20px', backgroundColor: '#e8474a' }}
-              >
+              <button className="submit-button" type="submit" disabled={loading} style={{ marginTop: '20px', backgroundColor: '#e8474a' }}>
                 {loading ? 'Gerando ingresso...' : <>Garantir meu ingresso <ArrowRight size={18} /></>}
               </button>
               <p className="privacy-note"><span style={{ color: '#e8474a' }}>⌁</span> Seus dados serão usados apenas para o credenciamento do evento.</p>
@@ -335,131 +395,32 @@ export default function IngressosPage() {
               <h2>Nos vemos no TEDx!</h2>
               <p className="success-copy">Seu ingresso gratuito está reservado. Baixe seu ticket abaixo e apresente no credenciamento.</p>
               
-              {/* AVISO DE SPAM DESTACADO NA TELA DE SUCESSO */}
               <div style={{ backgroundColor: 'rgba(232, 71, 74, 0.1)', padding: '12px 16px', borderRadius: '8px', margin: '16px 0', border: '1px solid #e8474a', textAlign: 'left' }}>
-                <p style={{ margin: '0 0 4px 0', fontSize: '0.85rem', fontWeight: 'bold', color: '#e8474a' }}>
-                  ⚠️ Olhou o e-mail e não achou?
-                </p>
+                <p style={{ margin: '0 0 4px 0', fontSize: '0.85rem', fontWeight: 'bold', color: '#e8474a' }}>⚠️ Olhou o e-mail e não achou?</p>
                 <p style={{ margin: 0, fontSize: '0.8rem', color: '#ccc', lineHeight: '1.4' }}>
                   Enviamos o ingresso no seu e-mail agora mesmo! Caso não esteja na Caixa de Entrada, dê uma olhada na pasta de <strong>Spam</strong> ou <strong>Lixo Eletrônico</strong>.
                 </p>
               </div>
               
-              {/* MODELO DO INGRESSO RENDERIZADO COM LÓGICA DE MOBILE/DESKTOP */}
-              <div
-                ref={ticketRef}
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  maxWidth: isMobile ? '350px' : '430px', // Ajusta o tamanho da div para mobile/desktop
-                  margin: '0 auto',
-                  fontFamily: 'Inter, Arial, sans-serif',
-                  color: '#000',
-                  userSelect: 'none',
-                  backgroundColor: '#fff', 
-                  borderRadius: '16px', 
-                  overflow: 'hidden', 
-                }}
-              >
-                {/* Template Imagem de Fundo */}
-                <img
-                  src="/ingresso-template.png"
-                  alt="Template Ingresso TEDx"
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
-                />
-
-                {/* INFORMAÇÕES DO EVENTO */}
+              <div style={{
+                width: '100%',
+                position: 'relative',
+                height: `${scale * 515}px`, 
+                marginBottom: '20px'
+              }}>
                 <div style={{
                   position: 'absolute',
-                  top: isMobile ? '22%' : '21%',
-                  left: '0',
-                  width: '100%',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'space-between', 
-                  padding: '0 8%',
-                  color: '#111',
-                  boxSizing: 'border-box'
+                  top: 0,
+                  left: '50%',
+                  marginLeft: '-215px',
+                  transform: `scale(${scale})`, 
+                  transformOrigin: 'top center',
+                  width: '430px', 
                 }}>
-                  {/* DATA */}
-                  <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.65rem', fontWeight: 'bold' }}>Data:</div>
-                    <div style={{ fontSize: isMobile ? '1.5rem' : '2.1rem', fontWeight: '900', lineHeight: '1', margin: isMobile ? '6px 0' : '10px 0' }}>19</div>
-                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', fontWeight: 'bold', lineHeight: '1.1' }}>Novembro<br />2026</div>
-                  </div>
-
-                  {/* HORÁRIO */}
-                  <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.65rem', fontWeight: 'bold' }}>Horário:</div>
-                    <div style={{ fontSize: isMobile ? '1.5rem' : '2.1rem', fontWeight: '900', lineHeight: '1', margin: isMobile ? '6px 0' : '10px 0' }}>14h</div>
-                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.6rem', fontWeight: 'bold' }}>Credenciamento</div>
-                  </div>
-
-                  {/* LOCAL */}
-                  <div style={{ textAlign: 'center', width: '30%' }}>
-                    <div style={{ fontSize: isMobile ? '0.5rem' : '0.65rem', fontWeight: 'bold' }}>Local:</div>
-                    <div style={{ fontSize: isMobile ? '0.45rem' : '0.58rem', fontWeight: 'bold', lineHeight: '1.25', marginTop: isMobile ? '8px' : '12px' }}>Centro de<br />Excelência<br />em Turismo</div>
-                    <div style={{ fontSize: isMobile ? '0.45rem' : '0.58rem', marginTop: '4px', fontWeight: '500' }}>CET - UnB</div>
-                  </div>
-                </div>
-
-                {/* NOME DO PARTICIPANTE */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: isMobile ? '42%' : '41.5%',
-                    left: '26%',  
-                    width: '68%',
-                    textAlign: 'left',
-                    color: '#111',
-                    whiteSpace: 'nowrap',
-                    lineHeight: '1',
-                    overflow: 'visible',
-                    margin: 0,
-                    padding: 0,
-                  }}
-                >
-                  <span style={{ fontSize: isMobile ? '0.7rem' : '0.85rem', fontWeight: '900', textTransform: 'uppercase' }}>
-                    {attendeeName}
-                  </span>
-                </div>
-
-                {/* QR CODE */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '68%', 
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    backgroundColor: '#fff',
-                    padding: isMobile ? '6px' : '8px',
-                    borderRadius: '12px',
-                    border: '1px solid #e5e5e5',
-                  }}
-                >
-                  {qrCodeUrl ? (
-                    <img
-                      src={qrCodeUrl}
-                      alt="QR Code do Ingresso"
-                      style={{ width: isMobile ? '100px' : '130px', height: isMobile ? '100px' : '130px', display: 'block', borderRadius: '4px' }}
-                    />
-                  ) : (
-                    <div style={{ width: isMobile ? '100px' : '130px', height: isMobile ? '100px' : '130px' }}>
-                      <QrCode />
-                    </div>
-                  )}
-                </div>
-
-                {/* RODAPÉ COLORIDO */}
-                <div style={{ position: 'absolute', bottom: '3.5%', left: '6%', fontSize: isMobile ? '0.6rem' : '0.75rem', fontWeight: 'bold', color: '#111' }}>
-                  UnB
-                </div>
-                <div style={{ position: 'absolute', bottom: '3.5%', right: '6%', fontSize: isMobile ? '0.6rem' : '0.75rem', fontWeight: 'bold', color: '#111' }}>
-                  2026
+                  {renderTicketLayout(false)}
                 </div>
               </div>
 
-              {/* BOTÕES DE DOWNLOAD */}
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', width: '100%' }}>
                 <button className="download-button" onClick={downloadTicketPNG} style={{ flex: 1 }}>
                   <Download size={17} /> Baixar PNG
@@ -478,41 +439,23 @@ export default function IngressosPage() {
         </section>
       </main>
 
-      {/* RODAPÉ */}
+      {/* O INGRESSO FANTASMA CORRIGIDO: position fixed no topo para o html2canvas não quebrar */}
+      <div style={{ position: 'fixed', top: 0, left: 0, zIndex: -9999, opacity: 0.01, pointerEvents: 'none' }}>
+        {renderTicketLayout(true)}
+      </div>
+
       <footer className="w-full bg-white text-black py-8 px-6 md:px-12 border-t border-gray-300">
         <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          
           <div className="flex-1 flex justify-center md:justify-start w-full">
-            <img 
-              src="/Ativo 23-8.png" 
-              alt="Marcas Realização e Fomento" 
-              className="w-full max-w-3xl h-auto object-contain" 
-            />
+            <img src="/Ativo 23-8.png" alt="Marcas Realização e Fomento" className="w-full max-w-3xl h-auto object-contain" />
           </div>
-          
           <div className="flex flex-col items-center text-center shrink-0">
-            <a 
-              href="https://www.instagram.com/unb.tedx?psln=MWsxcmh2aW51NHdoNA==" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="mb-1 hover:opacity-70 transition-opacity"
-              aria-label="Instagram TEDx UnB"
-            >
-              <img 
-                src="/IG-8.png" 
-                alt="Instagram" 
-                className="h-8 w-8 object-contain invert" 
-              />
+            <a href="https://www.instagram.com/unb.tedx" target="_blank" rel="noopener noreferrer" className="mb-1 hover:opacity-70 transition-opacity">
+              <img src="/IG-8.png" alt="Instagram" className="h-8 w-8 object-contain invert" />
             </a>
-
             <span className="font-bold text-sm md:text-base">Dúvidas | Suporte</span>
             <span className="text-sm md:text-base">unb.tedx@gmail.com</span>
-            
-            <p className="text-[9px] md:text-[10px] leading-tight font-medium mt-3 max-w-[220px]">
-              Este evento TEDx é uma iniciativa independente, realizada sob licença da TED.
-            </p>
           </div>
-          
         </div>
       </footer>
     </div>
