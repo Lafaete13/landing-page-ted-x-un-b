@@ -64,12 +64,12 @@ def home():
 # 1. Rota para cadastrar e emitir ingresso
 @app.post("/api/ingressos", status_code=201)
 def criar_ingresso(dados: IngressoCreate, db: Session = Depends(get_db)):
-    # 1. Trava de limite de 100 ingressos
+    # 1. Trava de limite de 150 ingressos
     total_ingressos = len(db.exec(select(Ingresso)).all())
-    if total_ingressos >= 100:
+    if total_ingressos >= 150:
         raise HTTPException(
             status_code=400, 
-            detail="Ingressos esgotados! O limite de 100 vagas para o evento foi atingido."
+            detail="Ingressos esgotados! O limite de 150 vagas para o evento foi atingido."
         )
 
     # 2. Valida se o e-mail já foi cadastrado
